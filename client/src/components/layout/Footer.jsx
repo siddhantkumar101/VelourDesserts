@@ -84,7 +84,8 @@ const Footer = () => {
 
         <div className="border-t border-cream/10 pt-8 mt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-cream/60">
           <p>&copy; {new Date().getFullYear()} Velour Desserts Co. All rights reserved.</p>
-          <div className="flex gap-4">
+          <div className="flex gap-6 items-center">
+            <Link to={ROUTES.ADMIN_LOGIN} className="hover:text-rose transition-colors font-bold uppercase tracking-widest text-[9px]">Admin Console</Link>
             <span>Built with ♥ in India</span>
           </div>
         </div>
