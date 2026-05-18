@@ -101,8 +101,11 @@ exports.googleCallback = catchAsync(async (req, res) => {
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 
-  // Dynamically direct to port 5175 since Vite dev server is on port 5175 locally
-  const clientUrl = 'http://localhost:5175';
+  // Dynamically direct to Vercel/production client URL or local Vite server
+  let clientUrl = process.env.CLIENT_URL || 'http://localhost:5175';
+  if (process.env.NODE_ENV === 'development') {
+    clientUrl = 'http://localhost:5175';
+  }
   const userJson = encodeURIComponent(JSON.stringify({
     _id: req.user._id,
     name: req.user.name,
