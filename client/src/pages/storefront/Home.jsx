@@ -219,13 +219,13 @@ const Home = () => {
           {/* Text panel */}
           <div className="lg:col-span-6 flex flex-col gap-6 text-center lg:text-left items-center lg:items-start page-transition">
             
-            <span className="text-[#FF7B93] tracking-[0.25em] uppercase text-xs font-bold bg-[#FF7B93]/10 border border-[#FF7B93]/20 px-4 py-2 rounded-full flex items-center gap-1.5 shadow-sm">
-              <Sparkles className="w-3.5 h-3.5" /> Taste the Future of Desserts
+            <span className="text-[#FF7B93] tracking-[0.3em] uppercase text-xs font-bold bg-[#FF7B93]/10 border border-[#FF7B93]/20 px-5 py-2 rounded-full flex items-center gap-1.5 shadow-lg">
+              <Sparkles className="w-3.5 h-3.5 text-[#FF7B93]" /> Fine Artisanal Pâtisserie
             </span>
             
             <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-cream leading-tight tracking-tight">
-              Anti-Gravity <br />
-              <span className="text-[#FF7B93] italic font-normal drop-shadow-[0_0_15px_rgba(255,123,147,0.3)]">Culinary Art</span>
+              Velour <br />
+              <span className="text-[#FF7B93] italic font-normal drop-shadow-[0_0_20px_rgba(255,123,147,0.45)]">Desserts</span>
             </h1>
             
             <p className="text-[#D4C3B9] text-lg md:text-xl font-serif leading-relaxed max-w-xl">
