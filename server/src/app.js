@@ -23,8 +23,12 @@ app.use(helmet());
 app.use(
   cors({
     origin: (origin, callback) => {
+      // Clean CLIENT_URL of trailing slashes if present to ensure exact match
+      let allowedClientUrl = process.env.CLIENT_URL || '';
+      allowedClientUrl = allowedClientUrl.replace(/\/+$/, '');
+
       // Allow any localhost origin in development, or the production CLIENT_URL
-      if (!origin || origin.startsWith('http://localhost:') || origin === process.env.CLIENT_URL) {
+      if (!origin || origin.startsWith('http://localhost:') || origin === allowedClientUrl) {
         callback(null, true);
       } else {
         callback(new Error('Not allowed by CORS'));

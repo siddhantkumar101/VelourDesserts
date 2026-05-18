@@ -2,8 +2,18 @@ import axios from 'axios';
 import { store } from '../stores/store';
 import { logout } from '../stores/authSlice';
 
+let apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api/v1';
+
+// Clean up trailing slashes
+apiBaseUrl = apiBaseUrl.replace(/\/+$/, '');
+
+// Append /api/v1 if not present
+if (!apiBaseUrl.endsWith('/api/v1')) {
+  apiBaseUrl = `${apiBaseUrl}/api/v1`;
+}
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api/v1',
+  baseURL: apiBaseUrl,
   withCredentials: true, // Send cookies with requests
 });
 
