@@ -11,6 +11,7 @@ export const ROUTES = {
   ORDERS: '/account/orders',
   PROFILE: '/account/profile',
   ADMIN_DASHBOARD: '/admin',
+  ADMIN_LOGIN: '/admin/login',
   ADMIN_ORDERS: '/admin/orders',
   ADMIN_PRODUCTS: '/admin/products',
 };

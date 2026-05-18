@@ -12,9 +12,9 @@ const AdminLayout = () => {
   useEffect(() => {
     // Basic guard: If not logged in or not admin, redirect
     if (!isAuthenticated) {
-      navigate(ROUTES.LOGIN);
+      navigate(ROUTES.ADMIN_LOGIN);
     } else if (user?.role !== 'admin') {
-      navigate(ROUTES.HOME);
+      navigate(ROUTES.ADMIN_LOGIN);
     }
   }, [user, isAuthenticated, navigate]);
 

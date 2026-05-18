@@ -30,6 +30,7 @@ const Dashboard = React.lazy(() => import('./pages/account/Dashboard'));
 
 // Admin Pages
 const AdminDashboard = React.lazy(() => import('./pages/admin/AdminDashboard'));
+const AdminLogin = React.lazy(() => import('./pages/admin/AdminLogin'));
 
 // Temporary Loading Fallback
 const Fallback = () => <div className="flex items-center justify-center min-h-screen">Loading...</div>;
@@ -59,6 +60,9 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/account" element={<Dashboard />} />
           </Route>
+
+          {/* Dedicated Admin Login Route */}
+          <Route path="/admin/login" element={<AdminLogin />} />
 
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminLayout />}>
