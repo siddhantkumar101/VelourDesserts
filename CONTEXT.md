@@ -1,29 +1,30 @@
 # Velour Desserts Co. Context
 
-**Current Phase:** Phase 2 Complete (Client Scaffold & Design System) / Phase 3 Setup Next
+**Current Phase:** Phase 3 Complete (Storefront & UI) / Phase 4 Setup Next
 **Date:** 2026-05-18
 
 ## Project Status
 - **Milestone 1:** Completed. Server scaffold, DB models, routing, middleware, config, utilities, controllers, and services are fully built.
 - **Milestone 2:** Completed. Client scaffold (Vite + React 18), Tailwind v3 design system, Redux Toolkit state management, React Router v6 setup, Axios API services.
-- **In Progress:** Transitioning to Phase 3 (Storefront & Auth UI).
+- **Milestone 3:** Completed. Storefront UI, Navigation (Navbar/Footer), Pages (Home, Product Listing, Product Detail), and Redux Cart Sidebar.
+- **In Progress:** Transitioning to Phase 4 (Checkout Flow & Auth UI).
 - **Blocked:** None. 
 
 ## Completed Items
 - **Backend:** Models, Routes, Controllers, Middleware, Services, DB/Stripe/AWS Config, Seed Scripts.
 - **Frontend Core:** Vite init, Tailwind setup + Design Tokens, globals.css, `main.jsx`, `App.jsx`.
 - **State & Data:** Redux Toolkit (`store.js`, `authSlice`, `cartSlice`, `uiSlice`), Axios interceptors (`api.js`), React Query Provider.
-- **UI Base:** Reusable `Button` primitive, lazy-loaded routing structure.
+- **UI Components:** Navbar, Footer, PageWrapper, Badge, Input, Button, CartSidebar.
+- **Storefront Pages:** Home, ProductListing, ProductDetail.
 - `server/src/utils/` (apiResponse, AppError, catchAsync, generateOrderId)
 - `server/src/services/` (availability, email, order, s3, stripe)
 - `server/src/controllers/` & `server/src/routes/`
 - `server/src/seed/` (seedAdmin, seedProducts)
 
 ## Next Actions
-1. Build Storefront Layout (Navbar, Footer).
-2. Implement Home page with featured products and hero section.
-3. Build Product Listing page with filtering and search.
-4. Implement Product Detail page with variant selection.
+1. Build Auth Pages (Login, Register).
+2. Build User Dashboard (Profile, Order History).
+3. Implement Checkout Flow (Cart Validation, Fulfillment Details, Payment Intent, Stripe Elements).
 
 ## Environment Variables Needed (Keys Only)
 - `PORT`
