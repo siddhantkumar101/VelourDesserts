@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import React, { Suspense } from 'react';
 import ScrollToTop from './components/common/ScrollToTop';
+import ToastContainer from './components/ui/ToastContainer';
 
 // Layouts
 const PageWrapper = React.lazy(() => import('./components/layout/PageWrapper'));
@@ -70,6 +71,7 @@ function App() {
           </Route>
         </Routes>
       </Suspense>
+      <ToastContainer />
     </Router>
   );
 }

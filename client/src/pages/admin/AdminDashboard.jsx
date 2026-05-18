@@ -249,8 +249,9 @@ const OrdersTab = ({ orders, onUpdateStatus }) => {
 // ==========================================
 // 3. PRODUCT CATALOG MANAGEMENT
 // ==========================================
-const ProductsTab = ({ products, onAddProduct, onDeleteProduct }) => {
+const ProductsTab = ({ products, onAddProduct, onUpdateProduct, onDeleteProduct }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingProduct, setEditingProduct] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -261,7 +262,21 @@ const ProductsTab = ({ products, onAddProduct, onDeleteProduct }) => {
     imageUrl: '',
   });
 
-  const handleCreate = (e) => {
+  const handleEditClick = (product) => {
+    setEditingProduct(product);
+    setFormData({
+      name: product.name,
+      description: product.description,
+      category: product.category || 'Cakes',
+      basePrice: product.basePrice,
+      leadTimeDays: product.leadTimeDays || 2,
+      flavours: product.flavours ? product.flavours.join(', ') : '',
+      imageUrl: product.images?.[0]?.url || '',
+    });
+    setIsModalOpen(true);
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
     const productData = {
       ...formData,
@@ -272,8 +287,15 @@ const ProductsTab = ({ products, onAddProduct, onDeleteProduct }) => {
         { label: 'Standard', servings: '4-6', priceINR: Number(formData.basePrice), isAvailable: true }
       ]
     };
-    onAddProduct(productData);
+    
+    if (editingProduct) {
+      onUpdateProduct(editingProduct._id, productData);
+    } else {
+      onAddProduct(productData);
+    }
+    
     setIsModalOpen(false);
+    setEditingProduct(null);
     setFormData({ name: '', description: '', category: 'Cakes', basePrice: '', leadTimeDays: 2, flavours: '', imageUrl: '' });
   };
 
@@ -284,7 +306,7 @@ const ProductsTab = ({ products, onAddProduct, onDeleteProduct }) => {
           <h2 className="font-serif text-xl font-bold text-chocolate">Dessert Catalog</h2>
           <p className="text-sm text-chocolate/60">Configure and customize available products.</p>
         </div>
-        <Button onClick={() => setIsModalOpen(true)} className="flex items-center gap-2">
+        <Button onClick={() => { setEditingProduct(null); setIsModalOpen(true); }} className="flex items-center gap-2">
           <Plus className="w-5 h-5" /> Add Dessert
         </Button>
       </div>
@@ -298,12 +320,20 @@ const ProductsTab = ({ products, onAddProduct, onDeleteProduct }) => {
                 alt={product.name} 
                 className="w-full h-full object-cover" 
               />
-              <button 
-                onClick={() => onDeleteProduct(product._id)}
-                className="absolute top-4 right-4 p-2 bg-white/90 backdrop-blur-sm text-error rounded-full hover:bg-error hover:text-white transition-colors shadow-sm"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
+              <div className="absolute top-4 right-4 flex gap-2">
+                <button 
+                  onClick={() => handleEditClick(product)}
+                  className="p-2 bg-white/90 backdrop-blur-sm text-chocolate rounded-full hover:bg-chocolate hover:text-white transition-colors shadow-sm"
+                >
+                  <Edit2 className="w-4 h-4" />
+                </button>
+                <button 
+                  onClick={() => onDeleteProduct(product._id)}
+                  className="p-2 bg-white/90 backdrop-blur-sm text-error rounded-full hover:bg-error hover:text-white transition-colors shadow-sm"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
             </div>
             <div className="p-5 flex flex-col flex-1">
               <span className="text-[10px] uppercase font-bold text-rose tracking-wider">{product.category}</span>
@@ -314,15 +344,20 @@ const ProductsTab = ({ products, onAddProduct, onDeleteProduct }) => {
         ))}
       </div>
 
-      {/* Creation Modal */}
+      {/* Creation/Edit Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-chocolate/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl p-6 md:p-8 max-w-lg w-full shadow-2xl relative max-h-[90vh] overflow-y-auto">
-            <button onClick={() => setIsModalOpen(false)} className="absolute top-6 right-6 p-2 text-chocolate/50 hover:text-chocolate rounded-full hover:bg-cream-dark">
+            <button 
+              onClick={() => { setIsModalOpen(false); setEditingProduct(null); }} 
+              className="absolute top-6 right-6 p-2 text-chocolate/50 hover:text-chocolate rounded-full hover:bg-cream-dark"
+            >
               <X className="w-5 h-5" />
             </button>
-            <h3 className="font-display text-2xl font-bold text-chocolate mb-6">Create New Dessert</h3>
-            <form onSubmit={handleCreate} className="flex flex-col gap-4">
+            <h3 className="font-display text-2xl font-bold text-chocolate mb-6">
+              {editingProduct ? 'Edit Dessert Details' : 'Create New Dessert'}
+            </h3>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <Input label="Name" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} required />
               <Input label="Description" value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} required />
               <div className="grid grid-cols-2 gap-4">
@@ -343,7 +378,9 @@ const ProductsTab = ({ products, onAddProduct, onDeleteProduct }) => {
                 <Input label="Image URL" type="url" value={formData.imageUrl} onChange={e => setFormData({ ...formData, imageUrl: e.target.value })} placeholder="https://..." />
               </div>
               <Input label="Flavours (comma-separated)" value={formData.flavours} onChange={e => setFormData({ ...formData, flavours: e.target.value })} placeholder="Chocolate, Vanilla, Salted Caramel" />
-              <Button type="submit" className="w-full mt-2">Create Product</Button>
+              <Button type="submit" className="w-full mt-2">
+                {editingProduct ? 'Save Dessert Changes' : 'Create Product'}
+              </Button>
             </form>
           </div>
         </div>
@@ -612,6 +649,16 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleUpdateProduct = async (id, productData) => {
+    try {
+      await api.patch(`/products/${id}`, productData);
+      dispatch(addToast({ message: 'Dessert successfully updated!', type: 'success' }));
+      fetchDashboardData();
+    } catch (error) {
+      dispatch(addToast({ message: 'Failed to update product details.', type: 'error' }));
+    }
+  };
+
   const handleDeleteProduct = async (id) => {
     if (!window.confirm('Delete this product from catalog?')) return;
     try {
@@ -725,6 +772,7 @@ const AdminDashboard = () => {
           <ProductsTab 
             products={products} 
             onAddProduct={handleAddProduct} 
+            onUpdateProduct={handleUpdateProduct}
             onDeleteProduct={handleDeleteProduct} 
           />
         )}

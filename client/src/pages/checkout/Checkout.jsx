@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { loadStripe } from '@stripe/stripe-js';
-import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { CheckCircle, CreditCard, MapPin, Calendar, ArrowLeft, Package } from 'lucide-react';
 import { ROUTES } from '../../constants/routes';
 import { formatCurrency } from '../../utils/formatCurrency';
@@ -11,61 +9,17 @@ import { clearCart } from '../../stores/cartSlice';
 import api from '../../services/api';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
+import { getFallbackImage } from '../../utils/imageFallback';
 
-// Load Stripe (Fallback to a dummy test key if env is missing for dev safety)
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || 'pk_test_TYooMQauvdEDq54NiTphI7jx');
-
-const CheckoutForm = ({ clientSecret, orderId, totalAmount, onBack }) => {
-  const stripe = useStripe();
-  const elements = useElements();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!stripe || !elements) return;
-
-    setIsLoading(true);
-
-    const { error, paymentIntent } = await stripe.confirmPayment({
-      elements,
-      redirect: 'if_required', // We handle redirect manually so we can verify backend sync
-    });
-
-    if (error) {
-      dispatch(addToast({ message: error.message, type: 'error' }));
-      setIsLoading(false);
-    } else if (paymentIntent && paymentIntent.status === 'succeeded') {
-      // Clear the cart when payment succeeds
-      dispatch(clearCart());
-      // Navigate to success page using path parameter
-      navigate(`/order-confirmation/${orderId}`);
-    } else {
-      dispatch(addToast({ message: 'Something went wrong with the payment.', type: 'error' }));
-      setIsLoading(false);
-    }
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-      <div className="bg-white p-6 rounded-2xl shadow-sm border border-chocolate/5">
-        <h3 className="font-display text-2xl font-bold text-chocolate mb-4 flex items-center gap-2">
-          <CreditCard className="w-6 h-6 text-rose" /> Payment Details
-        </h3>
-        <PaymentElement />
-      </div>
-      
-      <div className="flex gap-4">
-        <Button variant="outline" type="button" onClick={onBack} disabled={isLoading} className="w-1/3">
-          Back
-        </Button>
-        <Button type="submit" disabled={!stripe || isLoading} isLoading={isLoading} className="w-2/3 shadow-hover">
-          Pay {formatCurrency(totalAmount)}
-        </Button>
-      </div>
-    </form>
-  );
+// Load Razorpay dynamically in DOM
+const loadRazorpayScript = () => {
+  return new Promise((resolve) => {
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
 };
 
 const Checkout = () => {
@@ -75,9 +29,9 @@ const Checkout = () => {
   const { user } = useSelector((state) => state.auth);
 
   const [step, setStep] = useState(1);
-  const [clientSecret, setClientSecret] = useState('');
-  const [orderId, setOrderId] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState('razorpay'); // 'razorpay' or 'COD'
+  const [razorpayOrderData, setRazorpayOrderData] = useState(null);
 
   // Form State
   const [fulfillmentMethod, setFulfillmentMethod] = useState('delivery');
@@ -124,7 +78,6 @@ const Checkout = () => {
       dispatch(addToast({ message: 'Please select a fulfillment date', type: 'error' }));
       return false;
     }
-    // Very basic client-side validation for date > today
     if (new Date(fulfillmentDate) < new Date()) {
       dispatch(addToast({ message: 'Date must be in the future', type: 'error' }));
       return false;
@@ -168,44 +121,138 @@ const Checkout = () => {
           name: customerInfo.name,
           email: customerInfo.email,
           phone: customerInfo.phone
-        }
-      };
-
-      // 1. Create Stripe Payment Intent on the backend
-      const res = await api.post('/checkout/create-payment-intent', payload);
-      const { clientSecret, paymentIntentId, pricing, processedItems, couponId } = res.data;
-
-      // 2. Pre-create the Pending Order in MongoDB database
-      const confirmPayload = {
-        paymentIntentId,
-        couponCode: appliedCoupon?.code || '',
-        couponId,
-        fulfilmentDate: fulfillmentDate,
-        fulfilmentType: fulfillmentMethod,
-        deliveryAddress: fulfillmentMethod === 'delivery' ? shippingAddress : {},
-        customer: {
-          name: customerInfo.name,
-          email: customerInfo.email,
-          phone: customerInfo.phone
         },
-        processedItems,
-        pricing
+        paymentMethod: paymentMethod
       };
 
-      const orderRes = await api.post('/checkout/confirm-order', confirmPayload);
+      // Create Razorpay Order or COD Mock Intent on backend
+      const res = await api.post('/checkout/create-payment-intent', payload);
       
-      setClientSecret(clientSecret);
-      setOrderId(orderRes.data.orderId);
+      setRazorpayOrderData(res.data);
       setStep(3);
     } catch (error) {
       console.error(error);
       dispatch(addToast({ 
-        message: error.response?.data?.message || 'Failed to initialize order. Please try again.', 
+        message: error.response?.data?.message || 'Failed to initialize checkout. Please try again.', 
         type: 'error' 
       }));
     } finally {
       setIsProcessing(false);
     }
+  };
+
+  const handleCODPayment = async () => {
+    setIsProcessing(true);
+    try {
+      const confirmPayload = {
+        paymentIntentId: razorpayOrderData.paymentIntentId,
+        couponCode: appliedCoupon?.code || '',
+        couponId: razorpayOrderData.couponId,
+        fulfilmentDate: fulfillmentDate,
+        fulfilmentType: fulfillmentMethod,
+        deliveryAddress: fulfillmentMethod === 'delivery' ? shippingAddress : {},
+        customer: customerInfo,
+        processedItems: razorpayOrderData.processedItems,
+        pricing: razorpayOrderData.pricing,
+        isCOD: true
+      };
+
+      const confirmRes = await api.post('/checkout/confirm-order', confirmPayload);
+      dispatch(clearCart());
+      navigate(`/order-confirmation/${confirmRes.data.orderId}`);
+      dispatch(addToast({ message: 'COD Order placed successfully!', type: 'success' }));
+    } catch (error) {
+      dispatch(addToast({ message: 'Failed to place COD order.', type: 'error' }));
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handleMockRazorpayPayment = async () => {
+    setIsProcessing(true);
+    try {
+      const confirmPayload = {
+        paymentIntentId: razorpayOrderData.razorpayOrderId,
+        couponCode: appliedCoupon?.code || '',
+        couponId: razorpayOrderData.couponId,
+        fulfilmentDate: fulfillmentDate,
+        fulfilmentType: fulfillmentMethod,
+        deliveryAddress: fulfillmentMethod === 'delivery' ? shippingAddress : {},
+        customer: customerInfo,
+        processedItems: razorpayOrderData.processedItems,
+        pricing: razorpayOrderData.pricing,
+      };
+
+      const confirmRes = await api.post('/checkout/confirm-order', confirmPayload);
+      dispatch(clearCart());
+      navigate(`/order-confirmation/${confirmRes.data.orderId}`);
+      dispatch(addToast({ message: 'Order completed in Sandbox mode!', type: 'success' }));
+    } catch (error) {
+      dispatch(addToast({ message: 'Failed to confirm Sandbox order.', type: 'error' }));
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handleRealRazorpayPayment = async () => {
+    setIsProcessing(true);
+    const loaded = await loadRazorpayScript();
+    if (!loaded) {
+      dispatch(addToast({ message: 'Failed to load Razorpay Checkout. Please check your internet connection.', type: 'error' }));
+      setIsProcessing(false);
+      return;
+    }
+
+    const options = {
+      key: razorpayOrderData.keyId,
+      amount: razorpayOrderData.amount,
+      currency: razorpayOrderData.currency,
+      name: "Velour Desserts Co.",
+      description: "Artisanal Dessert Order",
+      order_id: razorpayOrderData.razorpayOrderId,
+      handler: async function (response) {
+        setIsProcessing(true);
+        try {
+          const confirmPayload = {
+            paymentIntentId: response.razorpay_order_id,
+            razorpayPaymentId: response.razorpay_payment_id,
+            razorpaySignature: response.razorpay_signature,
+            couponCode: appliedCoupon?.code || '',
+            couponId: razorpayOrderData.couponId,
+            fulfilmentDate: fulfillmentDate,
+            fulfilmentType: fulfillmentMethod,
+            deliveryAddress: fulfillmentMethod === 'delivery' ? shippingAddress : {},
+            customer: customerInfo,
+            processedItems: razorpayOrderData.processedItems,
+            pricing: razorpayOrderData.pricing,
+          };
+          const confirmRes = await api.post('/checkout/confirm-order', confirmPayload);
+          dispatch(clearCart());
+          navigate(`/order-confirmation/${confirmRes.data.orderId}`);
+          dispatch(addToast({ message: 'Payment successful! Order confirmed.', type: 'success' }));
+        } catch (err) {
+          dispatch(addToast({ message: 'Payment verification failed.', type: 'error' }));
+        } finally {
+          setIsProcessing(false);
+        }
+      },
+      prefill: {
+        name: customerInfo.name,
+        email: customerInfo.email,
+        contact: customerInfo.phone,
+      },
+      theme: {
+        color: "#C9897B",
+      },
+      modal: {
+        ondismiss: function () {
+          setIsProcessing(false);
+        }
+      }
+    };
+
+    const rzp = new window.Razorpay(options);
+    rzp.open();
   };
 
   const applyCoupon = async () => {
@@ -328,27 +375,142 @@ const Checkout = () => {
                 </>
               )}
 
+              {/* Payment selector early bind */}
+              <div className="border-t border-chocolate/5 pt-6 mt-4">
+                <h3 className="font-serif text-xl font-bold text-chocolate mb-4">Select Payment Method</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <button
+                    type="button"
+                    onClick={() => setPaymentMethod('razorpay')}
+                    className={`p-4 rounded-xl border-2 flex items-center gap-3 text-left transition-all ${
+                      paymentMethod === 'razorpay' ? 'border-rose bg-rose/5' : 'border-chocolate/10 hover:border-chocolate/20'
+                    }`}
+                  >
+                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                      paymentMethod === 'razorpay' ? 'border-rose bg-rose' : 'border-chocolate/20'
+                    }`}>
+                      {paymentMethod === 'razorpay' && <div className="w-2 h-2 bg-white rounded-full" />}
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-chocolate text-xs uppercase tracking-wider">Online (UPI/Cards)</h4>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setPaymentMethod('COD')}
+                    className={`p-4 rounded-xl border-2 flex items-center gap-3 text-left transition-all ${
+                      paymentMethod === 'COD' ? 'border-rose bg-rose/5' : 'border-chocolate/10 hover:border-chocolate/20'
+                    }`}
+                  >
+                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                      paymentMethod === 'COD' ? 'border-rose bg-rose' : 'border-chocolate/20'
+                    }`}>
+                      {paymentMethod === 'COD' && <div className="w-2 h-2 bg-white rounded-full" />}
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-chocolate text-xs uppercase tracking-wider">Cash on Delivery</h4>
+                    </div>
+                  </button>
+                </div>
+              </div>
+
               <Button 
-                className="w-full mt-4" 
+                className="w-full mt-8" 
                 onClick={proceedToPayment}
                 isLoading={isProcessing}
               >
-                Continue to Payment
+                Proceed to Payment Step
               </Button>
             </div>
           )}
 
-          {/* STEP 3: PAYMENT */}
-          {step === 3 && clientSecret && (
-            <div className="fade-in">
-              <Elements stripe={stripePromise} options={{ clientSecret, appearance: { theme: 'stripe', variables: { colorPrimary: '#C9897B' } } }}>
-                <CheckoutForm 
-                  clientSecret={clientSecret} 
-                  orderId={orderId} 
-                  totalAmount={total}
-                  onBack={() => setStep(2)} 
-                />
-              </Elements>
+          {/* STEP 3: PAYMENT SUBMIT */}
+          {step === 3 && razorpayOrderData && (
+            <div className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-chocolate/5 fade-in flex flex-col gap-6">
+              <div className="flex items-center gap-4 mb-4">
+                <button onClick={() => setStep(2)} className="p-2 hover:bg-cream-dark rounded-full transition-colors text-chocolate/60 hover:text-chocolate">
+                  <ArrowLeft className="w-5 h-5" />
+                </button>
+                <h2 className="font-display text-3xl font-bold text-chocolate flex items-center gap-2">
+                  <CreditCard className="w-8 h-8 text-rose" /> Complete Payment
+                </h2>
+              </div>
+
+              <div className="bg-cream-dark/30 p-5 rounded-2xl border border-chocolate/5">
+                <h4 className="font-bold text-chocolate mb-2 uppercase tracking-wide text-xs">Payment Information</h4>
+                <div className="flex flex-col gap-2 text-sm text-chocolate/80">
+                  <div className="flex justify-between">
+                    <span>Fulfillment Method:</span>
+                    <span className="font-medium capitalize">{fulfillmentMethod}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Fulfillment Date:</span>
+                    <span className="font-medium">{fulfillmentDate}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Chosen Payment Method:</span>
+                    <span className="font-medium font-bold text-rose">{paymentMethod === 'COD' ? 'Cash on Delivery (COD)' : 'Online Payment (Razorpay)'}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-4">
+                {paymentMethod === 'COD' ? (
+                  <div className="p-5 border-2 border-rose/30 bg-rose/5 rounded-2xl flex flex-col gap-2">
+                    <h4 className="font-bold text-chocolate uppercase tracking-wider text-sm">Cash on Delivery Confirmation</h4>
+                    <p className="text-xs text-chocolate/70 leading-relaxed">
+                      You have chosen to pay upon delivery or collection. Our pâtisserie chefs will handcraft your items fresh, and you can pay securely with Cash or UPI upon receiving your desserts!
+                    </p>
+                  </div>
+                ) : (
+                  <div className="p-5 border-2 border-rose/30 bg-rose/5 rounded-2xl flex flex-col gap-2">
+                    <h4 className="font-bold text-chocolate uppercase tracking-wider text-sm">Online Gateway Confirmation</h4>
+                    <p className="text-xs text-chocolate/70 leading-relaxed">
+                      Pay instantly with UPI (Google Pay, PhonePe, Paytm), Cards (RuPay, Visa, Mastercard) or Netbanking via the secure Razorpay payment modal.
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* Action Buttons based on Choice */}
+              <div className="border-t border-chocolate/5 pt-6 mt-4 flex gap-4">
+                <Button variant="outline" type="button" onClick={() => setStep(2)} disabled={isProcessing} className="w-1/3">
+                  Back
+                </Button>
+                
+                {paymentMethod === 'COD' ? (
+                  <Button 
+                    onClick={handleCODPayment}
+                    isLoading={isProcessing}
+                    className="w-2/3 shadow-hover"
+                  >
+                    Confirm & Place Order (COD)
+                  </Button>
+                ) : razorpayOrderData?.isMock ? (
+                  <Button 
+                    onClick={handleMockRazorpayPayment}
+                    isLoading={isProcessing}
+                    className="w-2/3 bg-rose text-white shadow-hover hover:bg-rose/95 border-none"
+                  >
+                    Authorize Sandbox Payment (₹{total})
+                  </Button>
+                ) : (
+                  <Button 
+                    onClick={handleRealRazorpayPayment}
+                    isLoading={isProcessing}
+                    className="w-2/3 shadow-hover"
+                  >
+                    Pay with Razorpay (₹{total})
+                  </Button>
+                )}
+              </div>
+
+              {paymentMethod === 'razorpay' && razorpayOrderData?.isMock && (
+                <div className="bg-[#FAF6F1] border border-rose/10 p-4 rounded-xl text-xs text-rose/85 font-medium mt-2 leading-relaxed">
+                  📢 <strong>Developer Notice:</strong> Razorpay API credentials are currently unconfigured or running in local development mode. Dynamic checkout sandbox is active. Click "Authorize Sandbox Payment" to immediately mock order completion!
+                </div>
+              )}
             </div>
           )}
 
@@ -363,7 +525,12 @@ const Checkout = () => {
               {items.map((item, idx) => (
                 <div key={idx} className="flex gap-4 items-center">
                   <div className="relative w-16 h-16 rounded-lg overflow-hidden shrink-0 border border-chocolate/10">
-                    <img src={item.image} alt={item.productName} className="w-full h-full object-cover" />
+                    <img 
+                      src={item.image} 
+                      alt={item.productName} 
+                      className="w-full h-full object-cover" 
+                      onError={(e) => { e.target.src = getFallbackImage(item.productId, 'light'); }}
+                    />
                     <span className="absolute -top-1 -right-1 bg-chocolate text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
                       {item.quantity}
                     </span>

@@ -78,7 +78,7 @@ exports.uploadProductImages = catchAsync(async (req, res, next) => {
   if (!product) return next(new AppError('Product not found.', 404));
 
   const newImages = req.files.map((file, index) => ({
-    url: file.location || file.path,
+    url: file.location || file.path || 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=600',
     altText: `${product.name} image ${index + 1}`,
     isPrimary: product.images.length === 0 && index === 0,
   }));

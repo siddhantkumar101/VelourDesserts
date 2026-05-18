@@ -17,3 +17,7 @@ export const handleImageErrorDark = (e) => {
   e.target.onerror = null;
   e.target.src = FALLBACK_IMAGE_DARK;
 };
+
+export const getFallbackImage = (productId, theme = 'light') => {
+  return theme === 'dark' ? FALLBACK_IMAGE_DARK : FALLBACK_IMAGE;
+};

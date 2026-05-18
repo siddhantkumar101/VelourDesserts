@@ -88,5 +88,28 @@ exports.updateMe = catchAsync(async (req, res) => {
 });
 
 exports.googleCallback = catchAsync(async (req, res) => {
-  await sendTokens(req.user, 200, res);
+  const accessToken = signAccessToken(req.user._id);
+  const refreshToken = signRefreshToken(req.user._id);
+
+  req.user.refreshToken = refreshToken;
+  await req.user.save({ validateBeforeSave: false });
+
+  res.cookie('refreshToken', refreshToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  });
+
+  // Dynamically direct to port 5175 since Vite dev server is on port 5175 locally
+  const clientUrl = 'http://localhost:5175';
+  const userJson = encodeURIComponent(JSON.stringify({
+    _id: req.user._id,
+    name: req.user.name,
+    email: req.user.email,
+    role: req.user.role,
+    avatar: req.user.avatar
+  }));
+
+  res.redirect(`${clientUrl}/login?token=${accessToken}&user=${userJson}`);
 });

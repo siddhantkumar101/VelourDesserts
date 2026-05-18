@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { Menu, X, ShoppingBag, User, Search, Sparkles } from 'lucide-react';
+import { Menu, X, ShoppingBag, User, Search, Sparkles, Shield } from 'lucide-react';
 import { ROUTES } from '../../constants/routes';
 import { toggleCart } from '../../stores/uiSlice';
 
@@ -12,7 +12,7 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const { items } = useSelector((state) => state.cart);
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
 
   const isDarkPage = location.pathname === '/';
   const cartItemsCount = items.reduce((total, item) => total + item.quantity, 0);
@@ -78,6 +78,26 @@ const Navbar = () => {
               <Search className="w-5 h-5" />
             </Link>
             
+            {/* Admin Console Shortcut Icon */}
+            {isAuthenticated && user?.role === 'admin' ? (
+              <Link 
+                to={ROUTES.ADMIN_DASHBOARD} 
+                className="p-2 text-[#FF7B93] hover:text-white transition-all hover:scale-110 duration-200 relative"
+                title="Admin Dashboard"
+              >
+                <Shield className="w-5 h-5 drop-shadow-[0_0_8px_rgba(255,123,147,0.5)]" />
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#FF7B93] rounded-full animate-pulse shadow-[0_0_4px_#FF7B93]" />
+              </Link>
+            ) : (
+              <Link 
+                to="/admin" 
+                className="p-2 text-cream/60 hover:text-[#FF7B93] transition-all hover:scale-110 duration-200"
+                title="Admin Portal"
+              >
+                <Shield className="w-5 h-5" />
+              </Link>
+            )}
+
             <Link 
               to={isAuthenticated ? ROUTES.ACCOUNT : ROUTES.LOGIN} 
               className="hidden sm:block p-2 hover:text-[#FF7B93] transition-all hover:scale-110 duration-200"
@@ -139,13 +159,20 @@ const Navbar = () => {
           </nav>
         </div>
 
-        <div className="p-6 bg-[#0F0805] border-t border-white/5">
+        <div className="p-6 bg-[#0F0805] border-t border-white/5 flex flex-col gap-4">
           <Link
             to={isAuthenticated ? ROUTES.ACCOUNT : ROUTES.LOGIN}
             className="flex items-center gap-3 text-cream hover:text-[#FF7B93] font-bold tracking-wider uppercase text-xs transition-colors"
           >
             <User className="w-5 h-5" />
             {isAuthenticated ? 'My Account' : 'Sign In / Register'}
+          </Link>
+          <Link
+            to="/admin"
+            className="flex items-center gap-3 text-cream/70 hover:text-[#FF7B93] font-bold tracking-wider uppercase text-[10px] transition-colors pt-3 border-t border-white/5"
+          >
+            <Shield className="w-4 h-4 text-[#FF7B93]" />
+            {isAuthenticated && user?.role === 'admin' ? 'Admin Dashboard' : 'Admin Portal'}
           </Link>
         </div>
       </div>

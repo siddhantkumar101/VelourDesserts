@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { authService } from '../../services/auth.service';
 import { setCredentials } from '../../stores/authSlice';
@@ -11,8 +11,24 @@ import Button from '../../components/ui/Button';
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [searchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({ email: '', password: '' });
+
+  useEffect(() => {
+    const token = searchParams.get('token');
+    const userParam = searchParams.get('user');
+    if (token && userParam) {
+      try {
+        const parsedUser = JSON.parse(decodeURIComponent(userParam));
+        dispatch(setCredentials({ user: parsedUser, accessToken: token }));
+        dispatch(addToast({ message: 'Welcome back!', type: 'success' }));
+        navigate(ROUTES.ACCOUNT);
+      } catch (err) {
+        console.error('Failed to parse Google OAuth user parameters', err);
+      }
+    }
+  }, [searchParams, dispatch, navigate]);
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.id]: e.target.value });
 

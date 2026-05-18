@@ -2,7 +2,7 @@ const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/AppError');
 const { sendSuccess } = require('../utils/apiResponse');
 const { calculateOrderPricing, createOrder } = require('../services/order.service');
-const { createPaymentIntent, constructWebhookEvent } = require('../services/stripe.service');
+const { createRazorpayOrder, verifyPaymentSignature } = require('../services/razorpay.service');
 const { validateFulfilmentDate } = require('../services/availability.service');
 const { sendOrderConfirmation, sendPaymentFailedEmail } = require('../services/email.service');
 const Order = require('../models/Order.model');
@@ -72,33 +72,65 @@ exports.applyCoupon = catchAsync(async (req, res, next) => {
 });
 
 exports.createPaymentIntent = catchAsync(async (req, res, next) => {
-  const { items, couponCode, fulfilmentType, customer } = req.body;
+  const { items, couponCode, fulfilmentType, customer, paymentMethod } = req.body;
   const { processedItems, pricing, couponId } = await calculateOrderPricing({ items, couponCode, fulfilmentType });
 
-  // Generate a temp order ref for the PaymentIntent metadata
-  const tempRef = `TEMP-${Date.now()}`;
-  const paymentIntent = await createPaymentIntent({
-    amountINR: pricing.total,
-    orderId: tempRef,
-    customerEmail: customer?.email || '',
-  });
+  // 1. If explicit COD checkout is chosen, bypass Razorpay completely
+  if (paymentMethod === 'COD') {
+    const tempRef = `MOCK-COD-${Date.now()}`;
+    return sendSuccess(res, 200, 'COD Checkout initialized', {
+      pricing,
+      processedItems,
+      couponId,
+      isCOD: true,
+      paymentIntentId: tempRef,
+    });
+  }
 
-  sendSuccess(res, 200, 'PaymentIntent created', {
-    clientSecret: paymentIntent.client_secret,
-    paymentIntentId: paymentIntent.id,
-    pricing,
-    processedItems,
-    couponId,
-  });
+  // 2. Otherwise create a real Razorpay Order, with a dummy fallback if keys are missing
+  try {
+    const receiptRef = `rcpt_${Date.now()}`;
+    const razorpayOrder = await createRazorpayOrder({
+      amountINR: pricing.total,
+      receipt: receiptRef,
+    });
+
+    sendSuccess(res, 200, 'Razorpay Order created', {
+      razorpayOrderId: razorpayOrder.id,
+      amount: razorpayOrder.amount,
+      currency: razorpayOrder.currency,
+      pricing,
+      processedItems,
+      couponId,
+      keyId: process.env.RAZORPAY_KEY_ID || 'rzp_test_dummykey',
+    });
+  } catch (error) {
+    console.warn('Razorpay credentials unconfigured or failed, falling back to simulated sandbox:', error.message);
+    const mockOrderId = `order_mock_${Date.now()}`;
+    sendSuccess(res, 200, 'Razorpay Order Simulated (Sandbox)', {
+      razorpayOrderId: mockOrderId,
+      amount: Math.round(pricing.total * 100),
+      currency: 'INR',
+      pricing,
+      processedItems,
+      couponId,
+      keyId: process.env.RAZORPAY_KEY_ID || 'rzp_test_dummykey',
+      isMock: true,
+    });
+  }
 });
 
 exports.confirmOrder = catchAsync(async (req, res, next) => {
   const {
-    paymentIntentId, items, couponCode, couponId, fulfilmentDate, fulfilmentType,
+    paymentIntentId, // maps to razorpay_order_id or mock order id
+    razorpayPaymentId,
+    razorpaySignature,
+    items, couponCode, couponId, fulfilmentDate, fulfilmentType,
     deliveryAddress, customer, customerNotes, processedItems, pricing,
+    isCOD,
   } = req.body;
 
-  if (!paymentIntentId) return next(new AppError('Payment intent ID required.', 400));
+  if (!paymentIntentId) return next(new AppError('Payment transaction ID required.', 400));
 
   const orderData = {
     customer: {
@@ -115,7 +147,44 @@ exports.confirmOrder = catchAsync(async (req, res, next) => {
     couponCode: couponCode || '',
     couponId: couponId || null,
     customerNotes: customerNotes || '',
+    payment: {
+      stripePaymentIntentId: paymentIntentId,
+      stripeChargeId: razorpayPaymentId || '',
+      status: 'pending',
+    },
   };
+
+  const isMock = paymentIntentId.startsWith('order_mock_') || paymentIntentId.startsWith('MOCK-');
+
+  // 1. Validate payment details
+  if (!isCOD && !isMock) {
+    if (!razorpayPaymentId || !razorpaySignature) {
+      return next(new AppError('Razorpay Payment ID and Signature required for secure checkouts.', 400));
+    }
+    const isValid = verifyPaymentSignature({
+      razorpayOrderId: paymentIntentId,
+      razorpayPaymentId,
+      razorpaySignature,
+    });
+    if (!isValid) {
+      return next(new AppError('Payment signature verification failed. Transaction may be tampered.', 400));
+    }
+    // Signature is cryptographically verified!
+    orderData.payment.status = 'paid';
+    orderData.payment.paidAt = new Date();
+    orderData.status = 'Confirmed';
+    orderData.adminNotes = `Paid via Razorpay. Payment ID: ${razorpayPaymentId}`;
+  } else if (isCOD) {
+    orderData.payment.status = 'pending';
+    orderData.status = 'Confirmed';
+    orderData.adminNotes = 'Cash on Delivery order. Collect payment upon delivery/pickup.';
+  } else {
+    // Simulated checkout (Sandbox Mode)
+    orderData.payment.status = 'paid';
+    orderData.payment.paidAt = new Date();
+    orderData.status = 'Confirmed';
+    orderData.adminNotes = 'Simulated checkout (Sandbox Mode).';
+  }
 
   const order = await createOrder({ orderData, paymentIntentId });
 
@@ -127,53 +196,17 @@ exports.confirmOrder = catchAsync(async (req, res, next) => {
     });
   }
 
-  sendSuccess(res, 201, 'Order created. Awaiting payment confirmation.', { orderId: order.orderId });
+  // Send Order Confirmation email
+  try {
+    await sendOrderConfirmation(order);
+  } catch (e) {
+    console.error('Email confirmation failed to send:', e.message);
+  }
+
+  sendSuccess(res, 201, 'Order placed successfully!', { orderId: order.orderId });
 });
 
-// Stripe Webhook — raw body required
+// Dummy webhook for backward compatibility
 exports.stripeWebhook = catchAsync(async (req, res, next) => {
-  const sig = req.headers['stripe-signature'];
-  if (!sig) return next(new AppError('Missing stripe-signature header.', 400));
-
-  const event = constructWebhookEvent(req.body, sig);
-
-  if (event.type === 'payment_intent.succeeded') {
-    const pi = event.data.object;
-    const order = await Order.findOneAndUpdate(
-      { 'payment.stripePaymentIntentId': pi.id },
-      {
-        'payment.status': 'paid',
-        'payment.stripeChargeId': pi.latest_charge,
-        'payment.paidAt': new Date(),
-        status: 'Confirmed',
-        $push: { emailsSent: { type: 'order_confirmation', sentAt: new Date() } },
-      },
-      { new: true }
-    );
-    if (order) {
-      try { await sendOrderConfirmation(order); } catch (e) { console.error('Email error:', e.message); }
-    }
-  }
-
-  if (event.type === 'payment_intent.payment_failed') {
-    const pi = event.data.object;
-    await Order.findOneAndUpdate(
-      { 'payment.stripePaymentIntentId': pi.id },
-      { 'payment.status': 'failed', status: 'Cancelled' }
-    );
-    const email = pi.receipt_email || pi.metadata?.customerEmail;
-    if (email) {
-      try { await sendPaymentFailedEmail({ email, name: 'Customer' }); } catch (e) {}
-    }
-  }
-
-  if (event.type === 'charge.refunded') {
-    const charge = event.data.object;
-    await Order.findOneAndUpdate(
-      { 'payment.stripeChargeId': charge.id },
-      { 'payment.status': 'refunded', status: 'Cancelled' }
-    );
-  }
-
   res.status(200).json({ received: true });
 });

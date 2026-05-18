@@ -89,13 +89,48 @@ const Home = () => {
     };
   }, []);
 
+  const MOCK_FEATURED = [
+    {
+      _id: 'mock1',
+      name: 'Classic Velvet Rose Cake',
+      slug: 'classic-velvet-rose',
+      category: 'Signature Cakes',
+      basePrice: 1850,
+      images: [{ url: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&auto=format&fit=crop&q=80', isPrimary: true }],
+      dietaryOptions: [{ label: 'Eggless' }]
+    },
+    {
+      _id: 'mock2',
+      name: 'Gourmet Chocolate Truffle',
+      slug: 'gourmet-chocolate-truffle',
+      category: 'Luxurious Truffles',
+      basePrice: 2100,
+      images: [{ url: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=600&auto=format&fit=crop&q=80', isPrimary: true }],
+      dietaryOptions: [{ label: 'Eggless' }]
+    },
+    {
+      _id: 'mock3',
+      name: 'Artisanal Macaron Carousel',
+      slug: 'artisanal-macaron-carousel',
+      category: 'French Macarons',
+      basePrice: 1250,
+      images: [{ url: 'https://images.unsplash.com/photo-1569864358642-9d1684040f43?w=600&auto=format&fit=crop&q=80', isPrimary: true }],
+      dietaryOptions: []
+    }
+  ];
+
   useEffect(() => {
     const fetchFeatured = async () => {
       try {
         const response = await productService.getFeaturedProducts();
-        setFeaturedProducts(response.data.products);
+        if (response?.data?.products && response.data.products.length > 0) {
+          setFeaturedProducts(response.data.products);
+        } else {
+          setFeaturedProducts(MOCK_FEATURED);
+        }
       } catch (error) {
-        console.error('Failed to load featured products', error);
+        console.error('Failed to load featured products from database, loading default creations', error);
+        setFeaturedProducts(MOCK_FEATURED);
       } finally {
         setIsLoading(false);
       }
