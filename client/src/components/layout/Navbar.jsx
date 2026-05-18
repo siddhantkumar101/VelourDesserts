@@ -14,6 +14,7 @@ const Navbar = () => {
   const { items } = useSelector((state) => state.cart);
   const { isAuthenticated } = useSelector((state) => state.auth);
 
+  const isDarkPage = location.pathname === '/';
   const cartItemsCount = items.reduce((total, item) => total + item.quantity, 0);
 
   useEffect(() => {
@@ -48,7 +49,9 @@ const Navbar = () => {
           
           {/* Mobile Menu Button */}
           <button
-            className="lg:hidden p-2 -ml-2 text-cream hover:text-[#FF7B93] transition-colors focus:outline-none"
+            className={`lg:hidden p-2 -ml-2 transition-colors focus:outline-none ${
+              isScrolled ? 'text-cream hover:text-[#FF7B93]' : (isDarkPage ? 'text-cream hover:text-[#FF7B93]' : 'text-chocolate hover:text-rose')
+            }`}
             onClick={() => setIsMobileMenuOpen(true)}
           >
             <Menu className="w-6 h-6" />
@@ -56,7 +59,9 @@ const Navbar = () => {
 
           {/* Brand Logo */}
           <Link to={ROUTES.HOME} className="flex-shrink-0 z-50 transition-transform duration-300 hover:scale-[1.03]">
-            <h1 className="font-display text-xl md:text-2xl font-black tracking-[0.1em] text-cream">
+            <h1 className={`font-display text-xl md:text-2xl font-black tracking-[0.1em] transition-colors duration-300 ${
+              isScrolled ? 'text-cream' : (isDarkPage ? 'text-cream' : 'text-chocolate')
+            }`}>
               VELOUR <span className="text-[#FF7B93] italic font-normal">DESSERTS</span>
             </h1>
           </Link>
@@ -67,16 +72,22 @@ const Navbar = () => {
               <Link
                 key={link.path}
                 to={link.path}
-                className="text-xs font-bold text-cream/90 hover:text-[#FF7B93] transition-all tracking-[0.25em] uppercase relative group py-1.5"
+                className={`text-xs font-bold transition-all tracking-[0.25em] uppercase relative group py-1.5 ${
+                  isScrolled ? 'text-cream/90 hover:text-[#FF7B93]' : (isDarkPage ? 'text-cream/90 hover:text-[#FF7B93]' : 'text-chocolate/90 hover:text-rose')
+                }`}
               >
                 {link.label}
-                <span className="absolute -bottom-0.5 left-0 w-0 h-[2px] bg-[#FF7B93] transition-all duration-300 group-hover:w-full rounded-full shadow-[0_0_8px_#FF7B93]" />
+                <span className={`absolute -bottom-0.5 left-0 w-0 h-[2px] transition-all duration-300 group-hover:w-full rounded-full ${
+                  isScrolled || isDarkPage ? 'bg-[#FF7B93] shadow-[0_0_8px_#FF7B93]' : 'bg-rose'
+                }`} />
               </Link>
             ))}
           </nav>
 
           {/* Action Icons */}
-          <div className="flex items-center gap-3 sm:gap-5 z-50 text-cream">
+          <div className={`flex items-center gap-3 sm:gap-5 z-50 transition-colors duration-300 ${
+            isScrolled ? 'text-cream' : (isDarkPage ? 'text-cream' : 'text-chocolate')
+          }`}>
             <Link to={ROUTES.SEARCH} className="p-2 hover:text-[#FF7B93] transition-all hover:scale-110 duration-200">
               <Search className="w-5 h-5" />
             </Link>
