@@ -9,6 +9,20 @@ import { formatCurrency } from '../../utils/formatCurrency';
 const Home = () => {
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentHeroIdx, setCurrentHeroIdx] = useState(0);
+
+  const heroImages = [
+    'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=1600&auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=1600&auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1534432122685-f4c5c47d9692?w=1600&auto=format&fit=crop&q=80'
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentHeroIdx((prev) => (prev + 1) % heroImages.length);
+    }, 4500); // Transitions every 4.5 seconds
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     const fetchFeatured = async () => {
@@ -28,16 +42,21 @@ const Home = () => {
     <div className="w-full">
       {/* Hero Section */}
       <section className="relative w-full h-[90vh] min-h-[650px] flex items-center justify-center overflow-hidden">
-        {/* Background Image & Overlay */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105 animate-[pulse_10s_infinite]"
-          style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=1600&auto=format&fit=crop&q=80)' }}
-        >
-          <div className="absolute inset-0 bg-chocolate/45 backdrop-blur-[1px]" />
-        </div>
+        {/* Background Images Slider */}
+        {heroImages.map((img, idx) => (
+          <div
+            key={idx}
+            className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-[1200ms] ease-out ${
+              currentHeroIdx === idx ? 'opacity-100 scale-105' : 'opacity-0 scale-100'
+            }`}
+            style={{ backgroundImage: `url(${img})` }}
+          />
+        ))}
+        {/* Constant overlay and blur */}
+        <div className="absolute inset-0 bg-chocolate/45 backdrop-blur-[1px] z-10" />
 
         {/* Hero Content */}
-        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto flex flex-col items-center gap-6 page-transition">
+        <div className="relative z-20 text-center px-4 max-w-4xl mx-auto flex flex-col items-center gap-6 page-transition">
           <span className="text-rose-light tracking-[0.25em] uppercase text-xs font-semibold bg-rose/20 px-3 py-1.5 rounded-full border border-rose-light/10">
             Handcrafted with Passion
           </span>
