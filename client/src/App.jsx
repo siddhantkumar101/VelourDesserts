@@ -12,6 +12,11 @@ const ProductDetail = React.lazy(() => import('./pages/storefront/ProductDetail'
 const Search = React.lazy(() => import('./pages/storefront/Search'));
 const About = React.lazy(() => import('./pages/storefront/About'));
 const CustomOrders = React.lazy(() => import('./pages/storefront/CustomOrders'));
+const FAQ = React.lazy(() => import('./pages/storefront/FAQ'));
+const Shipping = React.lazy(() => import('./pages/storefront/Shipping'));
+const Returns = React.lazy(() => import('./pages/storefront/Returns'));
+const Contact = React.lazy(() => import('./pages/storefront/Contact'));
+const PrivacyPolicy = React.lazy(() => import('./pages/storefront/PrivacyPolicy'));
 
 // Checkout Pages
 const Checkout = React.lazy(() => import('./pages/checkout/Checkout'));
@@ -41,6 +46,11 @@ function App() {
             <Route path="/search" element={<Search />} />
             <Route path="/about" element={<About />} />
             <Route path="/custom-orders" element={<CustomOrders />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/shipping" element={<Shipping />} />
+            <Route path="/returns" element={<Returns />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/order-confirmation/:orderId" element={<OrderConfirmation />} />
             <Route path="/login" element={<Login />} />
