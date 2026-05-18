@@ -1,13 +1,14 @@
 # Velour Desserts Co. Context
 
-**Current Phase:** Phase 3 Complete (Storefront & UI) / Phase 4 Setup Next
+**Current Phase:** Phase 4 Complete (Checkout & Auth) / Phase 5 Setup Next
 **Date:** 2026-05-18
 
 ## Project Status
 - **Milestone 1:** Completed. Server scaffold, DB models, routing, middleware, config, utilities, controllers, and services are fully built.
 - **Milestone 2:** Completed. Client scaffold (Vite + React 18), Tailwind v3 design system, Redux Toolkit state management, React Router v6 setup, Axios API services.
 - **Milestone 3:** Completed. Storefront UI, Navigation (Navbar/Footer), Pages (Home, Product Listing, Product Detail), and Redux Cart Sidebar.
-- **In Progress:** Transitioning to Phase 4 (Checkout Flow & Auth UI).
+- **Milestone 4:** Completed. Account Pages (Login, Register, Dashboard), Multi-step Checkout Flow, and Stripe Elements integration.
+- **In Progress:** Transitioning to Phase 5 (Admin Dashboard & Final Polish).
 - **Blocked:** None. 
 
 ## Completed Items
@@ -16,15 +17,16 @@
 - **State & Data:** Redux Toolkit (`store.js`, `authSlice`, `cartSlice`, `uiSlice`), Axios interceptors (`api.js`), React Query Provider.
 - **UI Components:** Navbar, Footer, PageWrapper, Badge, Input, Button, CartSidebar.
 - **Storefront Pages:** Home, ProductListing, ProductDetail.
+- **Account & Checkout:** Login, Register, Dashboard, Checkout (3-step with Stripe), OrderConfirmation.
 - `server/src/utils/` (apiResponse, AppError, catchAsync, generateOrderId)
 - `server/src/services/` (availability, email, order, s3, stripe)
 - `server/src/controllers/` & `server/src/routes/`
 - `server/src/seed/` (seedAdmin, seedProducts)
 
 ## Next Actions
-1. Build Auth Pages (Login, Register).
-2. Build User Dashboard (Profile, Order History).
-3. Implement Checkout Flow (Cart Validation, Fulfillment Details, Payment Intent, Stripe Elements).
+1. Build Admin Dashboard Layout (Sidebar, Stat Cards).
+2. Build Admin Panels (Product Management, Order Tracking).
+3. Finalize `.env` setup instructions and deployment documentation.
 
 ## Environment Variables Needed (Keys Only)
 - `PORT`
