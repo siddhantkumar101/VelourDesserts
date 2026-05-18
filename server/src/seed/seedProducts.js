@@ -9,7 +9,7 @@ const products = [
     slug: 'belgian-chocolate-entremet',
     description: 'A luxurious dark chocolate mousse layered with hazelnut praline crunch and moist chocolate sponge, finished with a mirror glaze.',
     category: 'Cakes',
-    images: [{ url: 'https://placehold.co/800x1000/2C1810/FFFFFF?text=Belgian+Chocolate+Entremet', altText: 'Belgian Chocolate Entremet', isPrimary: true }],
+    images: [{ url: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&auto=format&fit=crop&q=80', altText: 'Belgian Chocolate Entremet', isPrimary: true }],
     variants: [
       { label: '6" Round', size: '6 inch', servings: 8, priceINR: 2200, stockCapPerDay: 5, isAvailable: true },
       { label: '8" Round', size: '8 inch', servings: 15, priceINR: 3500, stockCapPerDay: 3, isAvailable: true }
@@ -33,7 +33,7 @@ const products = [
     slug: 'pistachio-rose-tart',
     description: 'Crisp buttery tart shell filled with fragrant pistachio frangipane, topped with rose-infused white chocolate ganache and dried petals.',
     category: 'Tarts',
-    images: [{ url: 'https://placehold.co/800x1000/4A7C59/FFFFFF?text=Pistachio+Rose+Tart', altText: 'Pistachio Rose Tart', isPrimary: true }],
+    images: [{ url: 'https://images.unsplash.com/photo-1519869325930-281384150729?w=800&auto=format&fit=crop&q=80', altText: 'Pistachio Rose Tart', isPrimary: true }],
     variants: [
       { label: '8" Tart', size: '8 inch', servings: 8, priceINR: 1800, stockCapPerDay: 8, isAvailable: true }
     ],
@@ -56,7 +56,7 @@ const products = [
     slug: 'classic-victoria-sponge',
     description: 'Light and airy vanilla sponge layered with house-made strawberry conserve and whipped vanilla bean mascarpone cream.',
     category: 'Cakes',
-    images: [{ url: 'https://placehold.co/800x1000/E8C5BC/2C1810?text=Victoria+Sponge', altText: 'Victoria Sponge', isPrimary: true }],
+    images: [{ url: 'https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?w=800&auto=format&fit=crop&q=80', altText: 'Victoria Sponge', isPrimary: true }],
     variants: [
       { label: '6" Round', size: '6 inch', servings: 8, priceINR: 1500, stockCapPerDay: 10, isAvailable: true },
       { label: '8" Round', size: '8 inch', servings: 15, priceINR: 2400, stockCapPerDay: 6, isAvailable: true }
@@ -80,7 +80,7 @@ const products = [
     slug: 'assorted-cookie-box-12pc',
     description: 'A selection of our signature chunky cookies: Sea Salt Chocolate Chunk, Double Chocolate Fudge, and Brown Butter Macadamia.',
     category: 'Cookies',
-    images: [{ url: 'https://placehold.co/800x1000/B8965A/FFFFFF?text=Cookie+Box', altText: 'Cookie Box', isPrimary: true }],
+    images: [{ url: 'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=800&auto=format&fit=crop&q=80', altText: 'Cookie Box', isPrimary: true }],
     variants: [
       { label: 'Box of 12', size: '12 pieces', servings: 12, priceINR: 1200, stockCapPerDay: 15, isAvailable: true }
     ],
@@ -103,7 +103,7 @@ const products = [
     slug: 'festive-gifting-hamper',
     description: 'The ultimate luxury hamper featuring an assortment of tarts, cookies, macarons, and a jar of house-made salted caramel.',
     category: 'Gifting',
-    images: [{ url: 'https://placehold.co/800x1000/C9897B/FFFFFF?text=Gifting+Hamper', altText: 'Gifting Hamper', isPrimary: true }],
+    images: [{ url: 'https://images.unsplash.com/photo-1607349913338-fca6f7fc42d0?w=800&auto=format&fit=crop&q=80', altText: 'Gifting Hamper', isPrimary: true }],
     variants: [
       { label: 'Standard Hamper', size: 'Assorted', servings: 10, priceINR: 4500, stockCapPerDay: 5, isAvailable: true },
       { label: 'Premium Hamper', size: 'Large Assortment', servings: 20, priceINR: 6500, stockCapPerDay: 3, isAvailable: true }
@@ -125,30 +125,100 @@ const products = [
   }
 ];
 
-// Add 25 more similar items to reach 30 products
+// Rich descriptions, gourmet names and real food photography for remaining 25 items
+const menuTemplates = [
+  {
+    name: 'Tiramisu Classic Cake',
+    category: 'Cakes',
+    description: 'Espresso-soaked ladyfingers layered with rich vanilla bean mascarpone zabaglione and dusted with premium cocoa powder.',
+    image: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=800&auto=format&fit=crop&q=80',
+    flavours: ['Coffee', 'Mascarpone'],
+    basePrice: 1900
+  },
+  {
+    name: 'Lemon Meringue Tart',
+    category: 'Tarts',
+    description: 'Crisp pastry shell loaded with tangy, zesty lemon curd, crowned with toasted pillowy Italian meringue swirls.',
+    image: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=800&auto=format&fit=crop&q=80',
+    flavours: ['Lemon', 'Meringue'],
+    basePrice: 1600
+  },
+  {
+    name: 'Double Chocolate Fudge Cookie Box',
+    category: 'Cookies',
+    description: 'Decadent chocolate cookies loaded with rich chocolate fudge chips and topped with a sprinkle of maldon sea salt.',
+    image: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=800&auto=format&fit=crop&q=80',
+    flavours: ['Double Chocolate'],
+    basePrice: 950
+  },
+  {
+    name: 'Gourmet Macaron Assortment (12pc)',
+    category: 'Gifting',
+    description: 'An elegant selection of French macarons featuring Salted Caramel, Dark Chocolate Ganache, Pistachio, and Raspberry.',
+    image: 'https://images.unsplash.com/photo-1569864358642-9d1684040f43?w=800&auto=format&fit=crop&q=80',
+    flavours: ['Assorted'],
+    basePrice: 2100
+  },
+  {
+    name: 'Summer Berry Cheesecake',
+    category: 'Cakes',
+    description: 'Creamy New York style cheesecake on a graham cracker crust, topped with fresh strawberries, blueberries, and raspberries.',
+    image: 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=800&auto=format&fit=crop&q=80',
+    flavours: ['Vanilla', 'Mixed Berry'],
+    basePrice: 2400
+  },
+  {
+    name: 'Salted Caramel Pecan Tart',
+    category: 'Tarts',
+    description: 'Rich, gooey house-made salted caramel and toasted premium pecans inside a crisp, buttery pastry crust.',
+    image: 'https://images.unsplash.com/photo-1519915028121-7d3463d20b13?w=800&auto=format&fit=crop&q=80',
+    flavours: ['Caramel', 'Pecan'],
+    basePrice: 1750
+  },
+  {
+    name: 'Red Velvet Gourmet Cupcakes (6pc)',
+    category: 'Seasonal',
+    description: 'Moist red velvet cupcakes with a hint of cocoa, piled high with velvety cream cheese frosting and sugar pearls.',
+    image: 'https://images.unsplash.com/photo-1616541823729-00fe0aacd32c?w=800&auto=format&fit=crop&q=80',
+    flavours: ['Vanilla', 'Cream Cheese'],
+    basePrice: 1100
+  },
+  {
+    name: 'Dark Chocolate Truffle Box (16pc)',
+    category: 'Gifting',
+    description: 'Silky smooth hand-rolled Belgian dark chocolate truffles, dusted in cocoa and fine pistachio crumble.',
+    image: 'https://images.unsplash.com/photo-1544982503-9f984c14501a?w=800&auto=format&fit=crop&q=80',
+    flavours: ['Dark Chocolate'],
+    basePrice: 2200
+  }
+];
+
+// Generate the remaining 25 products dynamically using these gorgeous templates
 for (let i = 1; i <= 25; i++) {
+  const template = menuTemplates[(i - 1) % menuTemplates.length];
+  const uniqueName = i > 8 ? `${template.name} Series II` : template.name;
   products.push({
-    name: `Artisan Dessert Model ${i}`,
-    slug: `artisan-dessert-model-${i}`,
-    description: 'A beautifully handcrafted dessert perfect for any occasion. Made with premium ingredients.',
-    category: ['Cakes', 'Tarts', 'Cookies', 'Gifting', 'Seasonal'][i % 5],
-    images: [{ url: `https://placehold.co/800x1000/F0E8DF/5C3D2E?text=Dessert+${i}`, altText: `Dessert ${i}`, isPrimary: true }],
+    name: uniqueName,
+    slug: `${template.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${i}`,
+    description: template.description,
+    category: template.category,
+    images: [{ url: template.image, altText: uniqueName, isPrimary: true }],
     variants: [
-      { label: 'Standard', size: 'Regular', servings: 4, priceINR: 800 + (i * 100), stockCapPerDay: 10, isAvailable: true }
+      { label: 'Standard size', size: 'Regular', servings: 6, priceINR: template.basePrice + (i * 20), stockCapPerDay: 12, isAvailable: true }
     ],
-    flavours: ['Vanilla', 'Chocolate', 'Fruit'][i % 3],
-    dietaryOptions: [],
-    basePrice: 800 + (i * 100),
+    flavours: template.flavours,
+    dietaryOptions: [{ label: 'Eggless Option', isAvailable: true, surchargeINR: 150 }],
+    basePrice: template.basePrice + (i * 20),
     hasGiftWrapping: i % 2 === 0,
-    giftWrappingSurcharge: 100,
-    leadTimeDays: (i % 3) + 2,
-    allowsCustomMessage: i % 2 === 0,
+    giftWrappingSurcharge: 120,
+    leadTimeDays: 2,
+    allowsCustomMessage: true,
     allowsSpecialInstructions: true,
     isActive: true,
-    isFeatured: i % 7 === 0,
-    metaTitle: `Artisan Dessert ${i} | Velour Desserts`,
-    metaDescription: 'Premium handcrafted dessert.',
-    tags: ['dessert', 'artisan']
+    isFeatured: i % 4 === 0,
+    metaTitle: `${uniqueName} | Velour Desserts`,
+    metaDescription: template.description,
+    tags: ['dessert', 'artisan', 'gourmet']
   });
 }
 

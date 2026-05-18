@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import { CheckCircle, CreditCard, MapPin, Calendar, ArrowLeft } from 'lucide-react';
+import { CheckCircle, CreditCard, MapPin, Calendar, ArrowLeft, Package } from 'lucide-react';
 import { ROUTES } from '../../constants/routes';
 import { formatCurrency } from '../../utils/formatCurrency';
 import { addToast } from '../../stores/uiSlice';
@@ -37,8 +37,10 @@ const CheckoutForm = ({ clientSecret, orderId, totalAmount, onBack }) => {
       dispatch(addToast({ message: error.message, type: 'error' }));
       setIsLoading(false);
     } else if (paymentIntent && paymentIntent.status === 'succeeded') {
-      // Backend webhook will handle fulfillment, we just navigate to success
-      navigate(`${ROUTES.ORDER_CONFIRMATION}?orderId=${orderId}`);
+      // Clear the cart when payment succeeds
+      dispatch(clearCart());
+      // Navigate to success page using path parameter
+      navigate(`/order-confirmation/${orderId}`);
     } else {
       dispatch(addToast({ message: 'Something went wrong with the payment.', type: 'error' }));
       setIsLoading(false);
@@ -104,7 +106,7 @@ const Checkout = () => {
         ? subtotal * (appliedCoupon.discountValue / 100) 
         : appliedCoupon.discountValue)
     : 0;
-  const shippingFee = fulfillmentMethod === 'delivery' ? 250 : 0; // Flat 250 INR for delivery
+  const shippingFee = fulfillmentMethod === 'delivery' ? 100 : 0; // Flat 100 INR for delivery to match backend schema
   const total = subtotal - discountAmount + shippingFee;
 
   useEffect(() => {
@@ -150,24 +152,55 @@ const Checkout = () => {
 
     try {
       const payload = {
-        items,
-        fulfillmentMethod,
-        fulfilmentDate: fulfillmentDate, // Matching backend schema spelling 'fulfilmentDate'
-        shippingAddress: fulfillmentMethod === 'delivery' ? shippingAddress : undefined,
+        items: items.map(item => ({
+          productId: item.productId,
+          variantLabel: item.variantLabel,
+          quantity: item.quantity,
+          flavour: item.flavour || '',
+          dietaryOption: item.dietaryOption || '',
+          hasGiftWrapping: !!item.hasGiftWrapping,
+          customMessage: item.customMessage || '',
+          specialInstructions: item.specialInstructions || ''
+        })),
+        fulfilmentType: fulfillmentMethod,
         couponCode: appliedCoupon?.code || undefined,
-        guestEmail: !user ? customerInfo.email : undefined,
-        guestName: !user ? customerInfo.name : undefined,
-        guestPhone: !user ? customerInfo.phone : undefined
+        customer: {
+          name: customerInfo.name,
+          email: customerInfo.email,
+          phone: customerInfo.phone
+        }
       };
 
+      // 1. Create Stripe Payment Intent on the backend
       const res = await api.post('/checkout/create-payment-intent', payload);
-      setClientSecret(res.data.clientSecret);
-      setOrderId(res.data.orderId);
+      const { clientSecret, paymentIntentId, pricing, processedItems, couponId } = res.data;
+
+      // 2. Pre-create the Pending Order in MongoDB database
+      const confirmPayload = {
+        paymentIntentId,
+        couponCode: appliedCoupon?.code || '',
+        couponId,
+        fulfilmentDate: fulfillmentDate,
+        fulfilmentType: fulfillmentMethod,
+        deliveryAddress: fulfillmentMethod === 'delivery' ? shippingAddress : {},
+        customer: {
+          name: customerInfo.name,
+          email: customerInfo.email,
+          phone: customerInfo.phone
+        },
+        processedItems,
+        pricing
+      };
+
+      const orderRes = await api.post('/checkout/confirm-order', confirmPayload);
+      
+      setClientSecret(clientSecret);
+      setOrderId(orderRes.data.orderId);
       setStep(3);
     } catch (error) {
       console.error(error);
       dispatch(addToast({ 
-        message: error.response?.data?.message || 'Failed to initialize payment. Please try again.', 
+        message: error.response?.data?.message || 'Failed to initialize order. Please try again.', 
         type: 'error' 
       }));
     } finally {
@@ -178,8 +211,13 @@ const Checkout = () => {
   const applyCoupon = async () => {
     if (!couponCode) return;
     try {
-      const res = await api.post('/coupons/validate', { code: couponCode, orderAmount: subtotal });
-      setAppliedCoupon({ code: couponCode, ...res.data.coupon });
+      const res = await api.post('/checkout/apply-coupon', { code: couponCode, subtotal });
+      setAppliedCoupon({ 
+        code: res.data.code, 
+        discountType: res.data.type, 
+        discountValue: res.data.value, 
+        discountAmount: res.data.discountAmount 
+      });
       dispatch(addToast({ message: 'Coupon applied successfully!', type: 'success' }));
     } catch (error) {
       dispatch(addToast({ message: error.response?.data?.message || 'Invalid coupon', type: 'error' }));

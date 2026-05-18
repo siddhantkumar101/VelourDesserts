@@ -1,6 +1,6 @@
 # Velour Desserts Co. Context
 
-**Current Phase:** Phase 4 Complete (Checkout & Auth) / Phase 5 Setup Next
+**Current Phase:** Phase 5 Complete (Admin Portal & Final Delivery)
 **Date:** 2026-05-18
 
 ## Project Status
@@ -8,7 +8,8 @@
 - **Milestone 2:** Completed. Client scaffold (Vite + React 18), Tailwind v3 design system, Redux Toolkit state management, React Router v6 setup, Axios API services.
 - **Milestone 3:** Completed. Storefront UI, Navigation (Navbar/Footer), Pages (Home, Product Listing, Product Detail), and Redux Cart Sidebar.
 - **Milestone 4:** Completed. Account Pages (Login, Register, Dashboard), Multi-step Checkout Flow, and Stripe Elements integration.
-- **In Progress:** Transitioning to Phase 5 (Admin Dashboard & Final Polish).
+- **Milestone 5:** Completed. Admin Layout, Analytics & Dashboard Panels (Overview, Orders, Products, Blockouts, Coupons) with Recharts plots, and clean production build verification.
+- **In Progress:** Final Polish & Handoff.
 - **Blocked:** None. 
 
 ## Completed Items
@@ -18,15 +19,16 @@
 - **UI Components:** Navbar, Footer, PageWrapper, Badge, Input, Button, CartSidebar.
 - **Storefront Pages:** Home, ProductListing, ProductDetail.
 - **Account & Checkout:** Login, Register, Dashboard, Checkout (3-step with Stripe), OrderConfirmation.
+- **Admin Console:** AdminLayout, AdminDashboard (Metrics, Orders, Products, Blockouts, Coupons tabs), Recharts plots.
 - `server/src/utils/` (apiResponse, AppError, catchAsync, generateOrderId)
 - `server/src/services/` (availability, email, order, s3, stripe)
 - `server/src/controllers/` & `server/src/routes/`
 - `server/src/seed/` (seedAdmin, seedProducts)
 
 ## Next Actions
-1. Build Admin Dashboard Layout (Sidebar, Stat Cards).
-2. Build Admin Panels (Product Management, Order Tracking).
-3. Finalize `.env` setup instructions and deployment documentation.
+1. Deploy platform staging environment.
+2. Complete AWS CloudFront setup for high-speed media delivery.
+3. Switch Stripe configuration from sandbox mode to live keys.
 
 ## Environment Variables Needed (Keys Only)
 - `PORT`

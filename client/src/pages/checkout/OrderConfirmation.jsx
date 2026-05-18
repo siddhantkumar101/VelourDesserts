@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSearchParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { CheckCircle, Package, ArrowRight, Home } from 'lucide-react';
 import { useDispatch } from 'react-redux';
 import { clearCart } from '../../stores/cartSlice';
@@ -7,8 +7,7 @@ import { ROUTES } from '../../constants/routes';
 import Button from '../../components/ui/Button';
 
 const OrderConfirmation = () => {
-  const [searchParams] = useSearchParams();
-  const orderId = searchParams.get('orderId');
+  const { orderId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
