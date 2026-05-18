@@ -1,26 +1,29 @@
 # Velour Desserts Co. Context
 
-**Current Phase:** Phase 1 Complete (Backend Scaffold & Implementation) / Phase 2 Setup Next
+**Current Phase:** Phase 2 Complete (Client Scaffold & Design System) / Phase 3 Setup Next
 **Date:** 2026-05-18
 
 ## Project Status
 - **Milestone 1:** Completed. Server scaffold, DB models, routing, middleware, config, utilities, controllers, and services are fully built.
-- **In Progress:** Transitioning to Phase 2 (Client Scaffold + Design System).
+- **Milestone 2:** Completed. Client scaffold (Vite + React 18), Tailwind v3 design system, Redux Toolkit state management, React Router v6 setup, Axios API services.
+- **In Progress:** Transitioning to Phase 3 (Storefront & Auth UI).
 - **Blocked:** None. 
 
 ## Completed Items
-- `server/package.json`, `.env.example`, `server.js`, `src/app.js`
-- `server/src/models/` (User, Product, Order, Coupon, BlockoutDate, Counter)
-- `server/src/config/` (db, s3, sendgrid, sentry, passport, stripe)
+- **Backend:** Models, Routes, Controllers, Middleware, Services, DB/Stripe/AWS Config, Seed Scripts.
+- **Frontend Core:** Vite init, Tailwind setup + Design Tokens, globals.css, `main.jsx`, `App.jsx`.
+- **State & Data:** Redux Toolkit (`store.js`, `authSlice`, `cartSlice`, `uiSlice`), Axios interceptors (`api.js`), React Query Provider.
+- **UI Base:** Reusable `Button` primitive, lazy-loaded routing structure.
 - `server/src/utils/` (apiResponse, AppError, catchAsync, generateOrderId)
 - `server/src/services/` (availability, email, order, s3, stripe)
 - `server/src/controllers/` & `server/src/routes/`
 - `server/src/seed/` (seedAdmin, seedProducts)
 
 ## Next Actions
-1. `npm install` inside `server/` to fetch all dependencies.
-2. Initialize Git repository and commit Milestone 1.
-3. Start Phase 2: Create `client/` Vite app and configure Tailwind + Redux Toolkit (instead of Zustand).
+1. Build Storefront Layout (Navbar, Footer).
+2. Implement Home page with featured products and hero section.
+3. Build Product Listing page with filtering and search.
+4. Implement Product Detail page with variant selection.
 
 ## Environment Variables Needed (Keys Only)
 - `PORT`

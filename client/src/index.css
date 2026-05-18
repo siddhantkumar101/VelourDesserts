@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;500;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-rose: #C9897B;
+    --color-rose-light: #E8C5BC;
+    --color-rose-dark: #9E5E52;
+    --color-cream: #FAF6F1;
+    --color-cream-dark: #F0E8DF;
+    --color-chocolate: #2C1810;
+    --color-mocha: #5C3D2E;
+    --color-gold: #B8965A;
+    --color-white: #FFFFFF;
+    --color-success: #4A7C59;
+    --color-error: #C0392B;
+    --color-warning: #D4A017;
+
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-serif: 'Cormorant Garamond', serif;
+    --font-sans: 'DM Sans', sans-serif;
+    --font-mono: 'DM Mono', monospace;
+
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 16px;
+    --radius-pill: 999px;
+
+    --shadow-card: 0 2px 16px rgba(44, 24, 16, 0.08);
+    --shadow-modal: 0 8px 48px rgba(44, 24, 16, 0.18);
+    --shadow-hover: 0 6px 24px rgba(44, 24, 16, 0.14);
+  }
+
+  body {
+    @apply bg-cream text-chocolate font-sans antialiased selection:bg-rose selection:text-white;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif;
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer utilities {
+  .page-transition {
+    animation: fadeUp 280ms ease-out forwards;
+  }
+
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .hover-lift {
+    @apply transition-all duration-200 hover:-translate-y-[3px] hover:shadow-hover;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
