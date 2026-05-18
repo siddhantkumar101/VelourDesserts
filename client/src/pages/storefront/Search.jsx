@@ -9,6 +9,7 @@ import { ROUTES } from '../../constants/routes';
 import { formatCurrency } from '../../utils/formatCurrency';
 import Badge from '../../components/ui/Badge';
 import Button from '../../components/ui/Button';
+import { handleImageError } from '../../utils/imageFallback';
 
 const Search = () => {
   const dispatch = useDispatch();
@@ -149,6 +150,7 @@ const Search = () => {
                       src={primaryImage?.url || 'https://placehold.co/400x500'} 
                       alt={primaryImage?.altText || product.name} 
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      onError={handleImageError}
                     />
                     
                     <Badge className="absolute top-4 left-4 bg-cream/90 backdrop-blur-md text-chocolate border-none shadow-sm">

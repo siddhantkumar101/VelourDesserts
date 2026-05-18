@@ -5,6 +5,7 @@ import { ROUTES } from '../../constants/routes';
 import Button from '../../components/ui/Button';
 import { productService } from '../../services/product.service';
 import { formatCurrency } from '../../utils/formatCurrency';
+import { handleImageErrorDark } from '../../utils/imageFallback';
 
 const Home = () => {
   const [featuredProducts, setFeaturedProducts] = useState([]);
@@ -174,6 +175,7 @@ const Home = () => {
                 src="https://images.unsplash.com/photo-1551024601-bec78aea704b?w=150&auto=format&fit=crop&q=80" 
                 alt="Orbit Donut" 
                 className="w-full h-full object-cover rounded-full"
+                onError={handleImageErrorDark}
               />
             </div>
           </div>
@@ -185,6 +187,7 @@ const Home = () => {
                 src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=150&auto=format&fit=crop&q=80" 
                 alt="Orbit Macaron" 
                 className="w-full h-full object-cover rounded-full"
+                onError={handleImageErrorDark}
               />
             </div>
           </div>
@@ -196,6 +199,7 @@ const Home = () => {
                 src="https://images.unsplash.com/photo-1587314168485-3236d6710814?w=200&auto=format&fit=crop&q=80" 
                 alt="Floating Cupcake" 
                 className="w-full h-full object-cover rounded-2xl"
+                onError={handleImageErrorDark}
               />
             </div>
           </div>
@@ -207,6 +211,7 @@ const Home = () => {
                 src="https://images.unsplash.com/photo-1519869325930-281384150729?w=200&auto=format&fit=crop&q=80" 
                 alt="Floating Tart" 
                 className="w-full h-full object-cover rounded-2xl"
+                onError={handleImageErrorDark}
               />
             </div>
           </div>
@@ -261,6 +266,7 @@ const Home = () => {
                   src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=700&auto=format&fit=crop&q=80" 
                   alt="Giant Centerpiece Cake" 
                   className="w-full h-full object-cover rounded-full border-2 border-white/10 scale-[1.01]"
+                  onError={handleImageErrorDark}
                 />
               </div>
 
@@ -331,6 +337,7 @@ const Home = () => {
                       alt={product.name}
                       className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                       loading="lazy"
+                      onError={handleImageErrorDark}
                     />
                     <div className="absolute top-4 left-4 flex flex-col gap-2">
                       {product.dietaryOptions.some(d => d.label.toLowerCase().includes('eggless')) && (
@@ -410,6 +417,7 @@ const Home = () => {
                   src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=800&auto=format&fit=crop&q=80" 
                   alt="Chef Crafting" 
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-700 ease-out"
+                  onError={handleImageErrorDark}
                 />
               </div>
               {/* Glowing Ambient light orbits */}

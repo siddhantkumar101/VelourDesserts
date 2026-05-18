@@ -7,6 +7,7 @@ import { updateQuantity, removeFromCart, clearCart } from '../../stores/cartSlic
 import { ROUTES } from '../../constants/routes';
 import { formatCurrency } from '../../utils/formatCurrency';
 import Button from '../ui/Button';
+import { handleImageError } from '../../utils/imageFallback';
 
 const CartSidebar = () => {
   const dispatch = useDispatch();
@@ -72,7 +73,12 @@ const CartSidebar = () => {
               {items.map((item, index) => (
                 <div key={`${item.productId}-${item.variantLabel}-${index}`} className="flex gap-4 bg-white p-3 rounded-xl shadow-sm border border-chocolate/5">
                   <div className="w-20 h-24 bg-cream-dark rounded-lg overflow-hidden shrink-0">
-                    <img src={item.image} alt={item.productName} className="w-full h-full object-cover" />
+                    <img 
+                      src={item.image} 
+                      alt={item.productName} 
+                      className="w-full h-full object-cover" 
+                      onError={handleImageError}
+                    />
                   </div>
                   <div className="flex flex-col flex-1 py-1">
                     <div className="flex justify-between items-start">

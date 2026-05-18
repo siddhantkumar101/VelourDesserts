@@ -8,6 +8,7 @@ import { addToCart } from '../../stores/cartSlice';
 import { toggleCart, addToast } from '../../stores/uiSlice';
 import Button from '../../components/ui/Button';
 import Badge from '../../components/ui/Badge';
+import { handleImageError } from '../../utils/imageFallback';
 
 const ProductDetail = () => {
   const { slug } = useParams();
@@ -84,13 +85,19 @@ const ProductDetail = () => {
                 src={primaryImage} 
                 alt={product.name} 
                 className="w-full h-full object-cover"
+                onError={handleImageError}
               />
             </div>
             {product.images.length > 1 && (
               <div className="grid grid-cols-4 gap-4">
                 {product.images.map((img, idx) => (
                   <div key={idx} className="aspect-square bg-cream-dark rounded-lg overflow-hidden cursor-pointer border-2 border-transparent hover:border-rose transition-colors">
-                    <img src={img.url} alt={img.altText} className="w-full h-full object-cover" />
+                    <img 
+                      src={img.url} 
+                      alt={img.altText} 
+                      className="w-full h-full object-cover" 
+                      onError={handleImageError}
+                    />
                   </div>
                 ))}
               </div>

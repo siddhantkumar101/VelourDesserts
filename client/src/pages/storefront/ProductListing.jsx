@@ -5,6 +5,7 @@ import { ROUTES } from '../../constants/routes';
 import { productService } from '../../services/product.service';
 import { formatCurrency } from '../../utils/formatCurrency';
 import Badge from '../../components/ui/Badge';
+import { handleImageError } from '../../utils/imageFallback';
 
 const CATEGORIES = ['All', 'Cakes', 'Tarts', 'Cookies', 'Gifting', 'Seasonal'];
 const SORT_OPTIONS = [
@@ -186,6 +187,7 @@ const ProductListing = () => {
                       alt={product.name}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                       loading="lazy"
+                      onError={handleImageError}
                     />
                     <div className="absolute top-3 left-3 flex flex-col gap-2">
                       {product.isFeatured && (
