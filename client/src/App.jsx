@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import React, { Suspense } from 'react';
+import ScrollToTop from './components/common/ScrollToTop';
 
 // Layouts
 const PageWrapper = React.lazy(() => import('./components/layout/PageWrapper'));
@@ -36,6 +37,7 @@ const Fallback = () => <div className="flex items-center justify-center min-h-sc
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <Suspense fallback={<Fallback />}>
         <Routes>
           {/* Public Storefront Routes */}
