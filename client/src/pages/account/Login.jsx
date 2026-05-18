@@ -48,7 +48,17 @@ const Login = () => {
   };
 
   const handleGoogleLogin = () => {
-    window.location.href = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api/v1'}/auth/google`;
+    let baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api/v1';
+    
+    // Clean up any double-slashes or trailing slashes
+    baseUrl = baseUrl.replace(/\/+$/, '');
+    
+    // If they specified only the domain, append '/api/v1' automatically
+    if (!baseUrl.endsWith('/api/v1')) {
+      baseUrl = `${baseUrl}/api/v1`;
+    }
+    
+    window.location.href = `${baseUrl}/auth/google`;
   };
 
   return (
