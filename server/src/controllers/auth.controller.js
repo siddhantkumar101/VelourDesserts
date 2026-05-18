@@ -103,9 +103,9 @@ exports.googleCallback = catchAsync(async (req, res) => {
 
   // Dynamically direct to Vercel/production client URL or local Vite server
   let clientUrl = process.env.CLIENT_URL || 'http://localhost:5175';
-  if (process.env.NODE_ENV === 'development') {
-    clientUrl = 'http://localhost:5175';
-  }
+  
+  // Clean up trailing slashes
+  clientUrl = clientUrl.replace(/\/+$/, '');
   const userJson = encodeURIComponent(JSON.stringify({
     _id: req.user._id,
     name: req.user.name,
