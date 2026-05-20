@@ -139,7 +139,7 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="w-full bg-[#0F0805] text-[#FAF6F1] relative overflow-hidden select-none">
+    <div className="w-full bg-[#0F0805] text-[#FAF6F1] relative overflow-hidden">
       
       {/* Custom Physics & Orbital styles */}
       <style>{`
@@ -191,10 +191,10 @@ const Home = () => {
       />
 
       {/* Sugar Dust Canvas Overlay */}
-      <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none z-10" />
+      <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none z-0" />
 
       {/* HERO SECTION: Zero-Gravity Space */}
-      <section className="relative w-full min-h-screen py-24 flex items-center justify-center overflow-hidden">
+      <section className="relative w-full min-h-screen py-16 sm:py-24 flex items-center justify-center overflow-hidden">
         
         {/* Soft magical background gradients */}
         <div className="absolute top-[20%] left-[10%] w-96 h-96 bg-rose/10 rounded-full blur-3xl z-0" />
@@ -254,7 +254,7 @@ const Home = () => {
         </div>
 
         {/* HERO CONTENT: Futuristic Text & Core Centerpiece */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center w-full">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 items-center w-full">
           
           {/* Text panel */}
           <div className="lg:col-span-6 flex flex-col gap-6 text-center lg:text-left items-center lg:items-start page-transition">
@@ -263,12 +263,12 @@ const Home = () => {
               <Sparkles className="w-3.5 h-3.5 text-[#FF7B93]" /> Fine Artisanal Pâtisserie
             </span>
             
-            <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-cream leading-tight tracking-tight">
+            <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black text-cream leading-tight tracking-tight">
               Velour <br />
               <span className="text-[#FF7B93] italic font-normal drop-shadow-[0_0_20px_rgba(255,123,147,0.45)]">Desserts</span>
             </h1>
             
-            <p className="text-[#D4C3B9] text-lg md:text-xl font-serif leading-relaxed max-w-xl">
+            <p className="text-[#D4C3B9] text-sm sm:text-base md:text-xl font-serif leading-relaxed max-w-xl">
               Welcome to a premium dessert universe where gourmet cakes, rich chocolates, and delicate pastries drift in zero gravity with magical neon caramel glows.
             </p>
             
@@ -289,7 +289,7 @@ const Home = () => {
 
           {/* Center Giant Floating Centerpiece Cake */}
           <div className="lg:col-span-6 flex items-center justify-center relative">
-            <div className="relative w-80 sm:w-[420px] aspect-square rounded-full flex items-center justify-center gravity-float relative">
+            <div className="relative w-56 sm:w-72 md:w-80 lg:w-[420px] aspect-square rounded-full flex items-center justify-center gravity-float relative">
               
               {/* Outer Glowing Rings */}
               <div className="absolute inset-0 rounded-full border border-white/5 bg-gradient-to-tr from-rose/10 to-gold/5 blur-[2px] scale-105" />

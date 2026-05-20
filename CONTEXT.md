@@ -9,8 +9,19 @@
 - **Milestone 3:** Completed. Storefront UI, Navigation (Navbar/Footer), Pages (Home, Product Listing, Product Detail), and Redux Cart Sidebar.
 - **Milestone 4:** Completed. Account Pages (Login, Register, Dashboard), Multi-step Checkout Flow, and Stripe Elements integration.
 - **Milestone 5:** Completed. Admin Layout, Analytics & Dashboard Panels (Overview, Orders, Products, Blockouts, Coupons) with Recharts plots, and clean production build verification.
-- **In Progress:** Final Polish & Handoff.
-- **Blocked:** None. 
+- **In Progress:** Mobile responsiveness polish + Final Polish & Handoff.
+- **Blocked:** None.
+
+## ⚠️ PENDING TASK — DO NOT FORGET
+**AUTOMATED BROWSER QA TESTING** — Browser automation quota ran out during testing (~7:30 PM IST resets).
+Must re-run these test cases on the live site https://velour-desserts.vercel.app:
+- TC-AUTH-01 to TC-AUTH-07 (Registration, Login, Logout, Session persistence)
+- TC-SHOP-01 to TC-SHOP-06 (Home, Shop, Search, Categories, Product detail)
+- TC-CHK-01 to TC-CHK-06 (Cart, COD Checkout, Order confirmation, Order history)
+- TC-ADM-01 to TC-ADM-04 (Admin login, Customer blocked, Session persistence)
+- TC-MGT-01 to TC-MGT-04 (Admin orders, status change)
+- TC-INV-01 to TC-INV-05 (Create, Edit, Delete products from admin)
+Test credentials: Admin=founder@velourdesserts.com/Admin@123, Customer=testuser_live_qa99@gmail.com/TestPassword123! 
 
 ## Completed Items
 - **Backend:** Models, Routes, Controllers, Middleware, Services, DB/Stripe/AWS Config, Seed Scripts.
