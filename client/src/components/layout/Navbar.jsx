@@ -122,16 +122,16 @@ const Navbar = () => {
 
       {/* Mobile Drawer Overlay */}
       <div
-        className={`pointer-events-auto fixed inset-0 bg-[#0F0805]/60 backdrop-blur-sm z-40 transition-opacity duration-300 lg:hidden ${
-          isMobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        className={`fixed inset-0 bg-[#0F0805]/60 backdrop-blur-sm z-40 transition-opacity duration-300 lg:hidden ${
+          isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
         onClick={() => setIsMobileMenuOpen(false)}
       />
       
       {/* Mobile Navigation Drawer */}
       <div
-        className={`pointer-events-auto fixed top-0 left-0 bottom-0 w-4/5 max-w-sm bg-[#160B06] z-50 shadow-[20px_0_50px_rgba(0,0,0,0.6)] transition-transform duration-300 ease-out lg:hidden flex flex-col border-r border-white/5 ${
-          isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+        className={`fixed top-0 left-0 bottom-0 w-4/5 max-w-sm bg-[#160B06] z-50 shadow-[20px_0_50px_rgba(0,0,0,0.6)] transition-transform duration-300 ease-out lg:hidden flex flex-col border-r border-white/5 ${
+          isMobileMenuOpen ? 'translate-x-0 pointer-events-auto' : '-translate-x-full pointer-events-none'
         }`}
       >
         <div className="p-5 flex justify-between items-center border-b border-white/5 bg-[#0F0805]">
