@@ -40,7 +40,7 @@ const Navbar = () => {
     <header className="fixed top-0 left-0 right-0 z-50 pointer-events-none">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
         <div 
-          className="pointer-events-auto mx-auto flex items-center justify-between transition-all duration-500 ease-out bg-[#160B06]/85 border border-white/[0.08] shadow-[0_12px_40px_rgba(0,0,0,0.55)] rounded-[32px] py-3.5 px-8 max-w-5xl"
+          className="pointer-events-auto mx-auto flex items-center justify-between transition-all duration-500 ease-out bg-[#160B06]/85 border border-white/[0.08] shadow-[0_12px_40px_rgba(0,0,0,0.55)] rounded-[32px] py-3.5 px-5 sm:px-8 max-w-5xl"
         >
           
           {/* Mobile Menu Button */}

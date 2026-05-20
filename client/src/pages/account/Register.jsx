@@ -37,11 +37,11 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-cream">
-      <div className="max-w-md w-full bg-white p-8 rounded-2xl shadow-sm border border-chocolate/5">
-        <div className="text-center mb-8">
-          <h2 className="font-display text-3xl font-bold text-chocolate">Create Account</h2>
-          <p className="text-chocolate/60 mt-2 font-serif text-lg">Join Velour Desserts</p>
+    <div className="min-h-[80vh] flex items-center justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8 bg-cream">
+      <div className="max-w-md w-full bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-chocolate/5">
+        <div className="text-center mb-6 sm:mb-8">
+          <h2 className="font-display text-2xl sm:text-3xl font-bold text-chocolate">Create Account</h2>
+          <p className="text-chocolate/60 mt-1 sm:mt-2 font-serif text-base sm:text-lg">Join Velour Desserts</p>
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">

@@ -62,11 +62,11 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-cream">
-      <div className="max-w-md w-full bg-white p-8 rounded-2xl shadow-sm border border-chocolate/5">
-        <div className="text-center mb-8">
-          <h2 className="font-display text-3xl font-bold text-chocolate">Sign In</h2>
-          <p className="text-chocolate/60 mt-2 font-serif text-lg">Welcome back to Velour Desserts</p>
+    <div className="min-h-[80vh] flex items-center justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8 bg-cream">
+      <div className="max-w-md w-full bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-chocolate/5">
+        <div className="text-center mb-6 sm:mb-8">
+          <h2 className="font-display text-2xl sm:text-3xl font-bold text-chocolate">Sign In</h2>
+          <p className="text-chocolate/60 mt-1 sm:mt-2 font-serif text-base sm:text-lg">Welcome back to Velour Desserts</p>
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
@@ -100,7 +100,7 @@ const Login = () => {
 
         <button 
           onClick={handleGoogleLogin}
-          className="mt-6 w-full flex items-center justify-center gap-3 bg-white border border-chocolate/20 text-chocolate px-4 py-3 rounded-pill hover:bg-cream-dark transition-colors font-medium text-sm shadow-sm"
+          className="mt-6 w-full flex items-center justify-center gap-2 sm:gap-3 bg-white border border-chocolate/20 text-chocolate px-3 sm:px-4 py-3 rounded-pill hover:bg-cream-dark transition-colors font-medium text-sm shadow-sm"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">
             <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
