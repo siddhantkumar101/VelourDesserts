@@ -5,233 +5,293 @@ const connectDB = require('../config/db');
 
 const products = [
   {
-    name: 'Belgian Chocolate Entremet',
-    slug: 'belgian-chocolate-entremet',
-    description: 'A luxurious dark chocolate mousse layered with hazelnut praline crunch and moist chocolate sponge, finished with a mirror glaze.',
+    name: 'Belgian Dark Chocolate Entremet',
+    slug: 'belgian-dark-chocolate-entremet',
+    description: 'Layers of 70% Valrhona dark chocolate mousse, hazelnut praline feuilletine crunch, and moist chocolate biscuit. Finished with a jet-black mirror glaze and gold leaf. The crown jewel of our patisserie.',
     category: 'Cakes',
-    images: [{ url: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&auto=format&fit=crop&q=80', altText: 'Belgian Chocolate Entremet', isPrimary: true }],
+    images: [{ url: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&auto=format&fit=crop&q=80', altText: 'Belgian Dark Chocolate Entremet', isPrimary: true }],
     variants: [
-      { label: '6" Round', size: '6 inch', servings: 8, priceINR: 2200, stockCapPerDay: 5, isAvailable: true },
-      { label: '8" Round', size: '8 inch', servings: 15, priceINR: 3500, stockCapPerDay: 3, isAvailable: true }
+      { label: '6" Round (8 pax)', size: '6 inch', servings: 8, priceINR: 2800, stockCapPerDay: 5, isAvailable: true },
+      { label: '8" Round (15 pax)', size: '8 inch', servings: 15, priceINR: 4200, stockCapPerDay: 3, isAvailable: true }
     ],
     flavours: ['Dark Chocolate', 'Hazelnut'],
-    dietaryOptions: [{ label: 'Eggless', isAvailable: true, surchargeINR: 200 }],
-    basePrice: 2200,
-    hasGiftWrapping: true,
-    giftWrappingSurcharge: 150,
-    leadTimeDays: 3,
-    allowsCustomMessage: true,
-    allowsSpecialInstructions: true,
-    isActive: true,
-    isFeatured: true,
-    metaTitle: 'Belgian Chocolate Entremet | Velour Desserts',
-    metaDescription: 'Luxurious dark chocolate mousse layered with hazelnut praline crunch. Perfect for celebrations.',
-    tags: ['chocolate', 'premium', 'bestseller']
+    dietaryOptions: [{ label: 'Eggless', isAvailable: true, surchargeINR: 300 }],
+    basePrice: 2800, hasGiftWrapping: true, giftWrappingSurcharge: 200,
+    leadTimeDays: 3, allowsCustomMessage: true, allowsSpecialInstructions: true,
+    isActive: true, isFeatured: true,
+    metaTitle: 'Belgian Dark Chocolate Entremet | Velour Desserts',
+    metaDescription: 'Luxury Valrhona dark chocolate mousse cake with mirror glaze. Order online.',
+    tags: ['chocolate', 'premium', 'bestseller', 'entremet']
   },
   {
-    name: 'Pistachio Rose Tart',
-    slug: 'pistachio-rose-tart',
-    description: 'Crisp buttery tart shell filled with fragrant pistachio frangipane, topped with rose-infused white chocolate ganache and dried petals.',
+    name: 'Pistachio Rose Cream Tart',
+    slug: 'pistachio-rose-cream-tart',
+    description: 'Crisp pâte sucrée shell filled with pistachio frangipane and Chantilly cream, decorated with crystallised rose petals, fresh raspberries, and crushed Iranian pistachios. A showstopper for any occasion.',
     category: 'Tarts',
-    images: [{ url: 'https://images.unsplash.com/photo-1519869325930-281384150729?w=800&auto=format&fit=crop&q=80', altText: 'Pistachio Rose Tart', isPrimary: true }],
+    images: [{ url: 'https://images.unsplash.com/photo-1519869325930-281384150729?w=800&auto=format&fit=crop&q=80', altText: 'Pistachio Rose Cream Tart', isPrimary: true }],
     variants: [
-      { label: '8" Tart', size: '8 inch', servings: 8, priceINR: 1800, stockCapPerDay: 8, isAvailable: true }
+      { label: '7" Tart (8 pax)', size: '7 inch', servings: 8, priceINR: 1950, stockCapPerDay: 8, isAvailable: true }
     ],
     flavours: ['Pistachio', 'Rose'],
     dietaryOptions: [{ label: 'Eggless', isAvailable: true, surchargeINR: 0 }],
-    basePrice: 1800,
-    hasGiftWrapping: true,
-    giftWrappingSurcharge: 100,
-    leadTimeDays: 2,
-    allowsCustomMessage: false,
-    allowsSpecialInstructions: true,
-    isActive: true,
-    isFeatured: true,
-    metaTitle: 'Pistachio Rose Tart | Velour Desserts',
-    metaDescription: 'Fragrant pistachio frangipane tart with rose-infused ganache.',
-    tags: ['pistachio', 'rose', 'floral']
+    basePrice: 1950, hasGiftWrapping: true, giftWrappingSurcharge: 150,
+    leadTimeDays: 2, allowsCustomMessage: false, allowsSpecialInstructions: true,
+    isActive: true, isFeatured: true,
+    metaTitle: 'Pistachio Rose Cream Tart | Velour Desserts',
+    metaDescription: 'Elegant pistachio frangipane tart with rose cream and fresh raspberries.',
+    tags: ['pistachio', 'rose', 'tart', 'floral']
   },
   {
-    name: 'Classic Victoria Sponge',
-    slug: 'classic-victoria-sponge',
-    description: 'Light and airy vanilla sponge layered with house-made strawberry conserve and whipped vanilla bean mascarpone cream.',
+    name: 'Tiramisu Layer Cake',
+    slug: 'tiramisu-layer-cake',
+    description: 'Soft espresso-drenched savoiardi sponge, layered with silky mascarpone zabaglione cream and dusted with premium Valrhona cocoa. Set in a luxury acetate collar for a stunning reveal.',
     category: 'Cakes',
-    images: [{ url: 'https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?w=800&auto=format&fit=crop&q=80', altText: 'Victoria Sponge', isPrimary: true }],
+    images: [{ url: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=800&auto=format&fit=crop&q=80', altText: 'Tiramisu Layer Cake', isPrimary: true }],
     variants: [
-      { label: '6" Round', size: '6 inch', servings: 8, priceINR: 1500, stockCapPerDay: 10, isAvailable: true },
-      { label: '8" Round', size: '8 inch', servings: 15, priceINR: 2400, stockCapPerDay: 6, isAvailable: true }
+      { label: '6" Round (8 pax)', size: '6 inch', servings: 8, priceINR: 2100, stockCapPerDay: 6, isAvailable: true },
+      { label: '8" Round (14 pax)', size: '8 inch', servings: 14, priceINR: 3200, stockCapPerDay: 4, isAvailable: true }
     ],
-    flavours: ['Vanilla', 'Strawberry'],
+    flavours: ['Espresso', 'Mascarpone'],
     dietaryOptions: [{ label: 'Eggless', isAvailable: false, surchargeINR: 0 }],
-    basePrice: 1500,
-    hasGiftWrapping: true,
-    giftWrappingSurcharge: 150,
-    leadTimeDays: 2,
-    allowsCustomMessage: true,
-    allowsSpecialInstructions: true,
-    isActive: true,
-    isFeatured: false,
-    metaTitle: 'Classic Victoria Sponge Cake | Velour Desserts',
-    metaDescription: 'Traditional Victoria sponge with house-made strawberry conserve and mascarpone cream.',
-    tags: ['vanilla', 'classic', 'fruit']
-  },
-  {
-    name: 'Assorted Cookie Box (12pc)',
-    slug: 'assorted-cookie-box-12pc',
-    description: 'A selection of our signature chunky cookies: Sea Salt Chocolate Chunk, Double Chocolate Fudge, and Brown Butter Macadamia.',
-    category: 'Cookies',
-    images: [{ url: 'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=800&auto=format&fit=crop&q=80', altText: 'Cookie Box', isPrimary: true }],
-    variants: [
-      { label: 'Box of 12', size: '12 pieces', servings: 12, priceINR: 1200, stockCapPerDay: 15, isAvailable: true }
-    ],
-    flavours: ['Assorted'],
-    dietaryOptions: [],
-    basePrice: 1200,
-    hasGiftWrapping: true,
-    giftWrappingSurcharge: 100,
-    leadTimeDays: 2,
-    allowsCustomMessage: false,
-    allowsSpecialInstructions: false,
-    isActive: true,
-    isFeatured: true,
-    metaTitle: 'Assorted Chunky Cookie Box | Velour Desserts',
-    metaDescription: 'Box of 12 signature chunky cookies. Perfect for gifting or sharing.',
-    tags: ['cookies', 'gifting', 'chocolate']
-  },
-  {
-    name: 'Festive Gifting Hamper',
-    slug: 'festive-gifting-hamper',
-    description: 'The ultimate luxury hamper featuring an assortment of tarts, cookies, macarons, and a jar of house-made salted caramel.',
-    category: 'Gifting',
-    images: [{ url: 'https://images.unsplash.com/photo-1607349913338-fca6f7fc42d0?w=800&auto=format&fit=crop&q=80', altText: 'Gifting Hamper', isPrimary: true }],
-    variants: [
-      { label: 'Standard Hamper', size: 'Assorted', servings: 10, priceINR: 4500, stockCapPerDay: 5, isAvailable: true },
-      { label: 'Premium Hamper', size: 'Large Assortment', servings: 20, priceINR: 6500, stockCapPerDay: 3, isAvailable: true }
-    ],
-    flavours: ['Assorted'],
-    dietaryOptions: [{ label: 'Eggless Options', isAvailable: true, surchargeINR: 500 }],
-    basePrice: 4500,
-    hasGiftWrapping: true,
-    giftWrappingSurcharge: 0,
-    leadTimeDays: 4,
-    allowsCustomMessage: true,
-    allowsSpecialInstructions: true,
-    isActive: true,
-    isFeatured: true,
-    isSeasonal: true,
-    metaTitle: 'Luxury Festive Gifting Hamper | Velour Desserts',
-    metaDescription: 'Premium assortment of artisanal desserts in a beautiful gifting box.',
-    tags: ['hamper', 'gifting', 'festive']
-  }
-];
-
-// Rich descriptions, gourmet names and real food photography for remaining 25 items
-const menuTemplates = [
-  {
-    name: 'Tiramisu Classic Cake',
-    category: 'Cakes',
-    description: 'Espresso-soaked ladyfingers layered with rich vanilla bean mascarpone zabaglione and dusted with premium cocoa powder.',
-    image: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=800&auto=format&fit=crop&q=80',
-    flavours: ['Coffee', 'Mascarpone'],
-    basePrice: 1900
+    basePrice: 2100, hasGiftWrapping: true, giftWrappingSurcharge: 200,
+    leadTimeDays: 2, allowsCustomMessage: true, allowsSpecialInstructions: true,
+    isActive: true, isFeatured: true,
+    metaTitle: 'Tiramisu Layer Cake | Velour Desserts',
+    metaDescription: 'Classic Italian tiramisu elevated into a stunning layer cake.',
+    tags: ['tiramisu', 'coffee', 'italian', 'classic']
   },
   {
     name: 'Lemon Meringue Tart',
+    slug: 'lemon-meringue-tart',
+    description: 'Zingy, citrusy lemon curd sits in a crisp all-butter pâte sablée shell, crowned with hand-torched Italian meringue peaks. A perfect balance of tart and sweet.',
     category: 'Tarts',
-    description: 'Crisp pastry shell loaded with tangy, zesty lemon curd, crowned with toasted pillowy Italian meringue swirls.',
-    image: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=800&auto=format&fit=crop&q=80',
+    images: [{ url: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=800&auto=format&fit=crop&q=80', altText: 'Lemon Meringue Tart', isPrimary: true }],
+    variants: [
+      { label: '7" Tart (8 pax)', size: '7 inch', servings: 8, priceINR: 1750, stockCapPerDay: 8, isAvailable: true }
+    ],
     flavours: ['Lemon', 'Meringue'],
-    basePrice: 1600
+    dietaryOptions: [{ label: 'Eggless', isAvailable: false, surchargeINR: 0 }],
+    basePrice: 1750, hasGiftWrapping: true, giftWrappingSurcharge: 100,
+    leadTimeDays: 2, allowsCustomMessage: false, allowsSpecialInstructions: true,
+    isActive: true, isFeatured: false,
+    metaTitle: 'Lemon Meringue Tart | Velour Desserts',
+    metaDescription: 'Classic French lemon meringue tart with torched Italian meringue.',
+    tags: ['lemon', 'meringue', 'tart', 'citrus']
   },
   {
-    name: 'Double Chocolate Fudge Cookie Box',
-    category: 'Cookies',
-    description: 'Decadent chocolate cookies loaded with rich chocolate fudge chips and topped with a sprinkle of maldon sea salt.',
-    image: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=800&auto=format&fit=crop&q=80',
-    flavours: ['Double Chocolate'],
-    basePrice: 950
-  },
-  {
-    name: 'Gourmet Macaron Assortment (12pc)',
-    category: 'Gifting',
-    description: 'An elegant selection of French macarons featuring Salted Caramel, Dark Chocolate Ganache, Pistachio, and Raspberry.',
-    image: 'https://images.unsplash.com/photo-1569864358642-9d1684040f43?w=800&auto=format&fit=crop&q=80',
-    flavours: ['Assorted'],
-    basePrice: 2100
-  },
-  {
-    name: 'Summer Berry Cheesecake',
+    name: 'Strawberry Vanilla Chantilly Cake',
+    slug: 'strawberry-vanilla-chantilly-cake',
+    description: 'Light, cloud-like vanilla genoise sponge layered with fresh strawberry coulis and whipped vanilla bean Chantilly cream. Topped with glazed whole strawberries and micro herbs.',
     category: 'Cakes',
-    description: 'Creamy New York style cheesecake on a graham cracker crust, topped with fresh strawberries, blueberries, and raspberries.',
-    image: 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=800&auto=format&fit=crop&q=80',
-    flavours: ['Vanilla', 'Mixed Berry'],
-    basePrice: 2400
+    images: [{ url: 'https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?w=800&auto=format&fit=crop&q=80', altText: 'Strawberry Vanilla Chantilly Cake', isPrimary: true }],
+    variants: [
+      { label: '6" Round (8 pax)', size: '6 inch', servings: 8, priceINR: 1850, stockCapPerDay: 8, isAvailable: true },
+      { label: '8" Round (14 pax)', size: '8 inch', servings: 14, priceINR: 2900, stockCapPerDay: 5, isAvailable: true }
+    ],
+    flavours: ['Vanilla', 'Strawberry'],
+    dietaryOptions: [{ label: 'Eggless', isAvailable: true, surchargeINR: 250 }],
+    basePrice: 1850, hasGiftWrapping: true, giftWrappingSurcharge: 150,
+    leadTimeDays: 2, allowsCustomMessage: true, allowsSpecialInstructions: true,
+    isActive: true, isFeatured: false,
+    metaTitle: 'Strawberry Vanilla Chantilly Cake | Velour Desserts',
+    metaDescription: 'Delicate vanilla cake with fresh strawberries and Chantilly cream.',
+    tags: ['strawberry', 'vanilla', 'chantilly', 'fresh']
+  },
+  {
+    name: 'New York Blueberry Cheesecake',
+    slug: 'new-york-blueberry-cheesecake',
+    description: 'Dense, creamy New York-style cheesecake on a graham cracker and butter crust, topped with a vibrant fresh blueberry compote. No cracks. No shortcuts. Pure indulgence.',
+    category: 'Cakes',
+    images: [{ url: 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=800&auto=format&fit=crop&q=80', altText: 'New York Blueberry Cheesecake', isPrimary: true }],
+    variants: [
+      { label: '7" Round (10 pax)', size: '7 inch', servings: 10, priceINR: 2400, stockCapPerDay: 6, isAvailable: true }
+    ],
+    flavours: ['Vanilla', 'Blueberry'],
+    dietaryOptions: [{ label: 'Eggless', isAvailable: false, surchargeINR: 0 }],
+    basePrice: 2400, hasGiftWrapping: true, giftWrappingSurcharge: 150,
+    leadTimeDays: 3, allowsCustomMessage: true, allowsSpecialInstructions: true,
+    isActive: true, isFeatured: true,
+    metaTitle: 'New York Blueberry Cheesecake | Velour Desserts',
+    metaDescription: 'Classic New York cheesecake with fresh blueberry compote topping.',
+    tags: ['cheesecake', 'blueberry', 'newyork', 'classic']
   },
   {
     name: 'Salted Caramel Pecan Tart',
+    slug: 'salted-caramel-pecan-tart',
+    description: 'House-made salted caramel, roasted whole pecans, and a hint of fleur de sel, all nestled in a crisp butter tart shell. Served with our signature bourbon caramel drizzle.',
     category: 'Tarts',
-    description: 'Rich, gooey house-made salted caramel and toasted premium pecans inside a crisp, buttery pastry crust.',
-    image: 'https://images.unsplash.com/photo-1519915028121-7d3463d20b13?w=800&auto=format&fit=crop&q=80',
-    flavours: ['Caramel', 'Pecan'],
-    basePrice: 1750
+    images: [{ url: 'https://images.unsplash.com/photo-1519915028121-7d3463d20b13?w=800&auto=format&fit=crop&q=80', altText: 'Salted Caramel Pecan Tart', isPrimary: true }],
+    variants: [
+      { label: '7" Tart (8 pax)', size: '7 inch', servings: 8, priceINR: 1900, stockCapPerDay: 8, isAvailable: true }
+    ],
+    flavours: ['Salted Caramel', 'Pecan'],
+    dietaryOptions: [{ label: 'Eggless', isAvailable: true, surchargeINR: 0 }],
+    basePrice: 1900, hasGiftWrapping: true, giftWrappingSurcharge: 100,
+    leadTimeDays: 2, allowsCustomMessage: false, allowsSpecialInstructions: true,
+    isActive: true, isFeatured: false,
+    metaTitle: 'Salted Caramel Pecan Tart | Velour Desserts',
+    metaDescription: 'Rich salted caramel and pecan tart with fleur de sel and butter pastry.',
+    tags: ['caramel', 'pecan', 'tart', 'salted']
   },
   {
-    name: 'Red Velvet Gourmet Cupcakes (6pc)',
-    category: 'Seasonal',
-    description: 'Moist red velvet cupcakes with a hint of cocoa, piled high with velvety cream cheese frosting and sugar pearls.',
-    image: 'https://images.unsplash.com/photo-1616541823729-00fe0aacd32c?w=800&auto=format&fit=crop&q=80',
-    flavours: ['Vanilla', 'Cream Cheese'],
-    basePrice: 1100
+    name: 'Signature Chunky Cookie Box (12pc)',
+    slug: 'signature-chunky-cookie-box-12pc',
+    description: 'A baker\'s dozen of our legendary thick, chewy cookies. Each box features: 4x Sea Salt Dark Chocolate Chunk, 4x Brown Butter Macadamia White Choc, and 4x Espresso Double Fudge. Individually wrapped.',
+    category: 'Cookies',
+    images: [{ url: 'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=800&auto=format&fit=crop&q=80', altText: 'Chunky Cookie Box', isPrimary: true }],
+    variants: [
+      { label: 'Box of 12', size: '12 pieces', servings: 12, priceINR: 1400, stockCapPerDay: 15, isAvailable: true },
+      { label: 'Box of 6', size: '6 pieces', servings: 6, priceINR: 750, stockCapPerDay: 20, isAvailable: true }
+    ],
+    flavours: ['Assorted'],
+    dietaryOptions: [],
+    basePrice: 750, hasGiftWrapping: true, giftWrappingSurcharge: 100,
+    leadTimeDays: 1, allowsCustomMessage: false, allowsSpecialInstructions: false,
+    isActive: true, isFeatured: true,
+    metaTitle: 'Signature Chunky Cookie Box | Velour Desserts',
+    metaDescription: 'Box of thick, chewy artisan cookies. Perfect for gifting or indulging.',
+    tags: ['cookies', 'chocolate', 'chunky', 'gifting']
+  },
+  {
+    name: 'French Macaron Box (12pc)',
+    slug: 'french-macaron-box-12pc',
+    description: 'A curated box of 12 hand-piped Parisian macarons with perfectly ruffled feet. Flavours: Salted Caramel, Dark Chocolate Ganache, Pistachio, Raspberry Rose, Matcha, and Vanilla Bean.',
+    category: 'Gifting',
+    images: [{ url: 'https://images.unsplash.com/photo-1569864358642-9d1684040f43?w=800&auto=format&fit=crop&q=80', altText: 'French Macaron Box', isPrimary: true }],
+    variants: [
+      { label: 'Box of 12', size: '12 pieces', servings: 12, priceINR: 2200, stockCapPerDay: 10, isAvailable: true },
+      { label: 'Box of 6', size: '6 pieces', servings: 6, priceINR: 1200, stockCapPerDay: 15, isAvailable: true }
+    ],
+    flavours: ['Assorted'],
+    dietaryOptions: [{ label: 'Eggless', isAvailable: false, surchargeINR: 0 }],
+    basePrice: 1200, hasGiftWrapping: true, giftWrappingSurcharge: 150,
+    leadTimeDays: 2, allowsCustomMessage: true, allowsSpecialInstructions: true,
+    isActive: true, isFeatured: true,
+    metaTitle: 'French Macaron Box | Velour Desserts',
+    metaDescription: 'Hand-piped Parisian macarons in 6 premium flavours. Perfect gifting box.',
+    tags: ['macarons', 'french', 'gifting', 'premium']
+  },
+  {
+    name: 'Luxury Dessert Hamper',
+    slug: 'luxury-dessert-hamper',
+    description: 'Our most indulgent gifting experience: a handcrafted wicker hamper containing one 6" entremet cake, a macaron box (6pc), a cookie box (6pc), a jar of house-made salted caramel sauce, and a 100g artisan chocolate bar. Ribbon-tied and personalised.',
+    category: 'Gifting',
+    images: [{ url: 'https://images.unsplash.com/photo-1607349913338-fca6f7fc42d0?w=800&auto=format&fit=crop&q=80', altText: 'Luxury Dessert Hamper', isPrimary: true }],
+    variants: [
+      { label: 'Standard Hamper', size: 'Assorted', servings: 10, priceINR: 5500, stockCapPerDay: 5, isAvailable: true },
+      { label: 'Grand Hamper', size: 'Large', servings: 20, priceINR: 8500, stockCapPerDay: 3, isAvailable: true }
+    ],
+    flavours: ['Assorted'],
+    dietaryOptions: [{ label: 'Eggless Options', isAvailable: true, surchargeINR: 600 }],
+    basePrice: 5500, hasGiftWrapping: false, giftWrappingSurcharge: 0,
+    leadTimeDays: 4, allowsCustomMessage: true, allowsSpecialInstructions: true,
+    isActive: true, isFeatured: true, isSeasonal: false,
+    metaTitle: 'Luxury Dessert Hamper | Velour Desserts',
+    metaDescription: 'Premium artisan dessert hamper with cake, macarons, cookies, and more.',
+    tags: ['hamper', 'gifting', 'luxury', 'premium']
+  },
+  {
+    name: 'Red Velvet Cream Cheese Cake',
+    slug: 'red-velvet-cream-cheese-cake',
+    description: 'Vibrant crimson velvet layers with a subtle cocoa depth, sandwiched with tangy cream cheese frosting and finished with velvet crumb coating. A timeless American classic done the Velour way.',
+    category: 'Cakes',
+    images: [{ url: 'https://images.unsplash.com/photo-1616541823729-00fe0aacd32c?w=800&auto=format&fit=crop&q=80', altText: 'Red Velvet Cream Cheese Cake', isPrimary: true }],
+    variants: [
+      { label: '6" Round (8 pax)', size: '6 inch', servings: 8, priceINR: 2000, stockCapPerDay: 7, isAvailable: true },
+      { label: '8" Round (14 pax)', size: '8 inch', servings: 14, priceINR: 3100, stockCapPerDay: 4, isAvailable: true }
+    ],
+    flavours: ['Red Velvet', 'Cream Cheese'],
+    dietaryOptions: [{ label: 'Eggless', isAvailable: true, surchargeINR: 200 }],
+    basePrice: 2000, hasGiftWrapping: true, giftWrappingSurcharge: 150,
+    leadTimeDays: 2, allowsCustomMessage: true, allowsSpecialInstructions: true,
+    isActive: true, isFeatured: false,
+    metaTitle: 'Red Velvet Cream Cheese Cake | Velour Desserts',
+    metaDescription: 'Classic red velvet cake with tangy cream cheese frosting. Order online.',
+    tags: ['red velvet', 'cream cheese', 'classic', 'cake']
   },
   {
     name: 'Dark Chocolate Truffle Box (16pc)',
+    slug: 'dark-chocolate-truffle-box-16pc',
+    description: 'Hand-rolled Belgian dark chocolate truffles with silky ganache centres. Finishes include: cocoa powder, crushed pistachio, gold dust, and candied orange zest. Presented in a magnetic closure luxury box.',
     category: 'Gifting',
-    description: 'Silky smooth hand-rolled Belgian dark chocolate truffles, dusted in cocoa and fine pistachio crumble.',
-    image: 'https://images.unsplash.com/photo-1544982503-9f984c14501a?w=800&auto=format&fit=crop&q=80',
-    flavours: ['Dark Chocolate'],
-    basePrice: 2200
+    images: [{ url: 'https://images.unsplash.com/photo-1544982503-9f984c14501a?w=800&auto=format&fit=crop&q=80', altText: 'Dark Chocolate Truffle Box', isPrimary: true }],
+    variants: [
+      { label: 'Box of 16', size: '16 pieces', servings: 8, priceINR: 2600, stockCapPerDay: 10, isAvailable: true },
+      { label: 'Box of 9', size: '9 pieces', servings: 4, priceINR: 1550, stockCapPerDay: 15, isAvailable: true }
+    ],
+    flavours: ['Dark Chocolate', 'Assorted'],
+    dietaryOptions: [{ label: 'Eggless', isAvailable: true, surchargeINR: 0 }],
+    basePrice: 1550, hasGiftWrapping: true, giftWrappingSurcharge: 150,
+    leadTimeDays: 2, allowsCustomMessage: true, allowsSpecialInstructions: false,
+    isActive: true, isFeatured: false,
+    metaTitle: 'Dark Chocolate Truffle Box | Velour Desserts',
+    metaDescription: 'Hand-rolled Belgian chocolate truffles in a luxury presentation box.',
+    tags: ['truffles', 'chocolate', 'gifting', 'belgian']
+  },
+  {
+    name: 'Mango Passionfruit Verrine',
+    slug: 'mango-passionfruit-verrine',
+    description: 'Tropical layers of fresh Alphonso mango mousse, tangy passionfruit curd, and a coconut panna cotta base served in elegant tall verrine glasses. Available as a set of 4.',
+    category: 'Seasonal',
+    images: [{ url: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&auto=format&fit=crop&q=80', altText: 'Mango Passionfruit Verrine', isPrimary: true }],
+    variants: [
+      { label: 'Set of 4 glasses', size: '4 verrines', servings: 4, priceINR: 1600, stockCapPerDay: 10, isAvailable: true }
+    ],
+    flavours: ['Mango', 'Passionfruit', 'Coconut'],
+    dietaryOptions: [{ label: 'Eggless', isAvailable: true, surchargeINR: 0 }],
+    basePrice: 1600, hasGiftWrapping: true, giftWrappingSurcharge: 100,
+    leadTimeDays: 2, allowsCustomMessage: false, allowsSpecialInstructions: true,
+    isActive: true, isFeatured: true,
+    metaTitle: 'Mango Passionfruit Verrine | Velour Desserts',
+    metaDescription: 'Tropical Alphonso mango and passionfruit verrine desserts. Set of 4.',
+    tags: ['mango', 'tropical', 'seasonal', 'verrine']
+  },
+  {
+    name: 'Hazelnut Praline Opera Cake',
+    slug: 'hazelnut-praline-opera-cake',
+    description: 'Six precision layers of coffee-soaked joconde sponge, hazelnut praline buttercream, and dark chocolate ganache — all crowned with a flawless chocolate mirror glaze. A true French masterpiece.',
+    category: 'Cakes',
+    images: [{ url: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=800&auto=format&fit=crop&q=80', altText: 'Hazelnut Praline Opera Cake', isPrimary: true }],
+    variants: [
+      { label: '6" Square (8 pax)', size: '6 inch square', servings: 8, priceINR: 3200, stockCapPerDay: 4, isAvailable: true }
+    ],
+    flavours: ['Coffee', 'Hazelnut', 'Dark Chocolate'],
+    dietaryOptions: [{ label: 'Eggless', isAvailable: false, surchargeINR: 0 }],
+    basePrice: 3200, hasGiftWrapping: true, giftWrappingSurcharge: 200,
+    leadTimeDays: 4, allowsCustomMessage: true, allowsSpecialInstructions: true,
+    isActive: true, isFeatured: true,
+    metaTitle: 'Hazelnut Praline Opera Cake | Velour Desserts',
+    metaDescription: 'Classic French Opera cake with hazelnut praline. A patisserie masterpiece.',
+    tags: ['opera', 'hazelnut', 'coffee', 'french', 'premium']
+  },
+  {
+    name: 'Matcha White Chocolate Tart',
+    slug: 'matcha-white-chocolate-tart',
+    description: 'Premium ceremonial-grade Japanese matcha custard tart topped with silky white chocolate ganache rosettes and shaved matcha. A sophisticated Japanese-French fusion.',
+    category: 'Tarts',
+    images: [{ url: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=800&auto=format&fit=crop&q=80', altText: 'Matcha White Chocolate Tart', isPrimary: true }],
+    variants: [
+      { label: '7" Tart (8 pax)', size: '7 inch', servings: 8, priceINR: 2100, stockCapPerDay: 6, isAvailable: true }
+    ],
+    flavours: ['Matcha', 'White Chocolate'],
+    dietaryOptions: [{ label: 'Eggless', isAvailable: true, surchargeINR: 0 }],
+    basePrice: 2100, hasGiftWrapping: true, giftWrappingSurcharge: 100,
+    leadTimeDays: 2, allowsCustomMessage: false, allowsSpecialInstructions: true,
+    isActive: true, isFeatured: false,
+    metaTitle: 'Matcha White Chocolate Tart | Velour Desserts',
+    metaDescription: 'Ceremonial grade matcha tart with white chocolate ganache. Japanese-French fusion.',
+    tags: ['matcha', 'white chocolate', 'japanese', 'tart']
   }
 ];
-
-// Generate the remaining 25 products dynamically using these gorgeous templates
-for (let i = 1; i <= 25; i++) {
-  const template = menuTemplates[(i - 1) % menuTemplates.length];
-  const uniqueName = i > 8 ? `${template.name} Series II` : template.name;
-  products.push({
-    name: uniqueName,
-    slug: `${template.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${i}`,
-    description: template.description,
-    category: template.category,
-    images: [{ url: template.image, altText: uniqueName, isPrimary: true }],
-    variants: [
-      { label: 'Standard size', size: 'Regular', servings: 6, priceINR: template.basePrice + (i * 20), stockCapPerDay: 12, isAvailable: true }
-    ],
-    flavours: template.flavours,
-    dietaryOptions: [{ label: 'Eggless Option', isAvailable: true, surchargeINR: 150 }],
-    basePrice: template.basePrice + (i * 20),
-    hasGiftWrapping: i % 2 === 0,
-    giftWrappingSurcharge: 120,
-    leadTimeDays: 2,
-    allowsCustomMessage: true,
-    allowsSpecialInstructions: true,
-    isActive: true,
-    isFeatured: i % 4 === 0,
-    metaTitle: `${uniqueName} | Velour Desserts`,
-    metaDescription: template.description,
-    tags: ['dessert', 'artisan', 'gourmet']
-  });
-}
 
 const seedProducts = async () => {
   try {
     await connectDB();
     console.log('Clearing existing products...');
     await Product.deleteMany({});
-    
-    console.log('Inserting seed products...');
+    console.log('Inserting 15 premium products with real market prices...');
     await Product.insertMany(products);
-    
-    console.log('✅ 30 products seeded successfully!');
+    console.log('✅ 15 artisan products seeded successfully with genuine Indian market prices!');
     process.exit(0);
   } catch (error) {
     console.error('❌ Seeding failed:', error);

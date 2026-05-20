@@ -92,28 +92,28 @@ const Home = () => {
   const MOCK_FEATURED = [
     {
       _id: 'mock1',
-      name: 'Classic Velvet Rose Cake',
-      slug: 'classic-velvet-rose',
-      category: 'Signature Cakes',
-      basePrice: 1850,
+      name: 'Belgian Dark Chocolate Entremet',
+      slug: 'belgian-dark-chocolate-entremet',
+      category: 'Cakes',
+      basePrice: 2800,
       images: [{ url: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&auto=format&fit=crop&q=80', isPrimary: true }],
       dietaryOptions: [{ label: 'Eggless' }]
     },
     {
       _id: 'mock2',
-      name: 'Gourmet Chocolate Truffle',
-      slug: 'gourmet-chocolate-truffle',
-      category: 'Luxurious Truffles',
-      basePrice: 2100,
-      images: [{ url: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=600&auto=format&fit=crop&q=80', isPrimary: true }],
+      name: 'Pistachio Rose Cream Tart',
+      slug: 'pistachio-rose-cream-tart',
+      category: 'Tarts',
+      basePrice: 1950,
+      images: [{ url: 'https://images.unsplash.com/photo-1519869325930-281384150729?w=600&auto=format&fit=crop&q=80', isPrimary: true }],
       dietaryOptions: [{ label: 'Eggless' }]
     },
     {
       _id: 'mock3',
-      name: 'Artisanal Macaron Carousel',
-      slug: 'artisanal-macaron-carousel',
-      category: 'French Macarons',
-      basePrice: 1250,
+      name: 'French Macaron Box (12pc)',
+      slug: 'french-macaron-box-12pc',
+      category: 'Gifting',
+      basePrice: 1200,
       images: [{ url: 'https://images.unsplash.com/photo-1569864358642-9d1684040f43?w=600&auto=format&fit=crop&q=80', isPrimary: true }],
       dietaryOptions: []
     }
